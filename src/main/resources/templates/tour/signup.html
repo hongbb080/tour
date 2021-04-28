@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+
+<link rel="stylesheet" href="/css/bootstrap.css" th:href="@{/css/bootstrap.css}">
+<script src="/js/jquery-3.5.1.js" th:src="@{/js/jquery-3.5.1.js}"></script>
+<script src="/js/popper.min.js" th:src="@{/js/popper.min.js}"></script>
+<script src="/js/bootstrap.js" th:src="@{/js/bootstrap.js}"></script>
+<!-- 네이버 -->
+<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+<!-- 카카오 -->
+<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap');
+	
+	html {
+	    font-family: 'Black Han Sans', sans-serif;
+	}
+	
+	h3 {
+	    font-weight:700;
+	}
+	
+	.check_font {
+		font-size:13px
+	}
+	
+	#modalbg {
+		background-color: #f3f3f3;
+	}
+
+</style>
+<script>
+   	$(document).ready(function() {
+   		
+   		$("#join").click(function() {
+   			var userId = $("#userId1").val();
+   			var userPw = $("#userPw1").val();
+   			var userPwCheck = $("#userPwCheck1").val();
+   			var nickName = $("#nickname").val();
+   			var email = $("#userEmail").val();
+   			var agree = $("#agree").val();
+   			
+   			if(!userId){
+   				alert("아이디를 입력해주세요.");
+   				$("#userId1").focus();
+   				return false;
+   			}
+   			else if(!userPw){
+   				alert("비밀번호를 입력해주세요.");
+   				$("#userPw").focus();
+   				return false;
+   			}
+   			else if(!userPwCheck){
+   				alert("비밀번호 확인을 입력해주세요.");
+   				$("#userPwCheck").focus();
+   				return false;
+   			}
+   			else if(userPw != userPwCheck){
+   				alert("비밀번호가 맞지 않습니다.");
+   				$("#userPwCheck").focus();
+   				return false;
+   			}
+   			else if(!nickName){
+   				alert("닉네임을 입력해주세요.");
+   				$("#nickname").focus();
+   				return false;
+   			}
+   			else if(!userEmail){
+   				alert("이메일을 입력해주세요.");
+   				$("#userEmail").focus();
+   				return false;
+   			}
+   			// 체크박스 부분 수정
+   			else if (!$("input:checked[id='agree']").is(":checked")){ 
+   				alert("이용약관을 확인해주세요."); 
+   				$("#agree").focus(); 
+   				return false; 
+   			}
+
+
+   			
+   		});
+   		$("#userId1").blur(function() {
+   			var userId = $("#userId1").val();
+   			var rule = /^[a-z][a-z\d]{4,11}$/;
+        	var result = rule.test(userId);
+   			
+   			$("#userIdConfirm").text(userId);
+   			$("#id_check").css("color", "black");
+   			
+   			var sendData = {userId : userId};
+   			if (userId == "") {
+   				$("#id_check").text("아이디를 입력해주세요");
+				$("#id_check").css("color", "red");
+   			}
+   			
+   			if (result == false) {
+   				$("#id_check").text("아이디는 영어 소문자,숫자 4-12자리입니다");
+				$("#id_check").css("color", "red");
+   			}
+   			else{
+	   			$.ajax({
+	   				url : "/tour/signupIdCheck",
+	   				data : sendData,
+	   				async : false,
+	   				type : "GET",
+	   				success : function(data){
+	   					if (data == 1) {
+	   						$("#id_check").text("사용중인 아이디입니다");
+							$("#id_check").css("color", "red");
+	   						}
+	   					else {
+	   						$("#id_check").text("사용가능한 아이디입니다");
+							$("#id_check").css("color", "blue");
+	   						}
+	   				}
+	   			});
+   			}
+   			
+   		});
+   		
+   		$("#userPw1").blur(function() {
+   			var userPw = $("#userPw1").val();
+   			var rule = /^[a-zA-z0-9]{6,12}$/;
+        	var result = rule.test(userPw);
+        	if (result == false) {
+        		$("#pw_check").text("비밀번호는 영어 대문자,소문자, 숫자 6~12자리 입니다.");
+        		$("#pw_check").css("color", "red");
+        	}
+        	else {
+        		$("#pw_check").text("사용가능한 비밀번호입니다.");
+        		$("#pw_check").css("color", "blue");
+        	}
+   		});
+   		$("#nickname").blur(function() {
+   			var nickname = $("#nickname").val();
+   			var sendData = {nickname : nickname};
+   			if (nickname =="") {
+   				$("#nickname_check").text("닉네임을 입력해주세요");
+				$("#nickname_check").css("color", "red");
+   			}
+   			else {
+	   			$.ajax({
+	   				url : "/tour/signupNicknameCheck",
+	   				data : sendData,
+	   				async : false,
+	   				type : "GET",
+	   				success : function(data){
+	   					if (data == 1) {
+	   						$("#nickname_check").text("사용중인 닉네임입니다");
+							$("#nickname_check").css("color", "red");
+	   						}
+	   					else {
+	   						$("#nickname_check").text("사용가능한 닉네임입니다");
+							$("#nickname_check").css("color", "blue");
+	   						}
+	   				}
+	   			});
+   			}
+   		});
+   		$("#userEmail").blur(function() {
+   			var userEmail = $("#userEmail").val();
+   			var sendData = {userEmail : userEmail};
+   			if (userEmail == "") {
+   				$("#email_check").text("이메일을 입력해주세요");
+				$("#email_check").css("color", "red");
+   			}
+   			else {
+	   			$.ajax({
+	   				url : "/tour/signupEmailCheck",
+	   				data : sendData,
+	   				type : "GET",
+	   				success : function(data){
+	   					if (data == 1) {
+	   						$("#email_check").text("사용중인 이메일 입니다");
+							$("#email_check").css("color", "red");
+	   						}
+	   					else {
+	   						$("#email_check").text("사용가능한 이메일 입니다");
+							$("#email_check").css("color", "blue");
+	   					}
+	   				}
+	   			});
+   			}
+   		});
+   		currentUrl();
+   	});
+   	function currentUrl() {
+   		var link = document.referrer;
+   		var urls = link.split("/tour");
+   		var result = "/tour" + urls[1];
+   		
+   		$("#userUrl").val(result);
+   	}
+</script>
+</head>
+<body>
+    <header>
+        <div align="right" class="div1 container" th:unless="${session.userId} != null" style="height:24px">
+            <button data-toggle="modal" data-target="#modal1" type="button" class="border border-0 bg-white mb-2 btn1 pr-0" id="btn1">로그인
+            </button>
+            <div class="modal" id="modal1" data-backdrop="static">
+	            <div class="modal-dialog modal-md modal-dialog-centered">
+	                <div class="modal-content">
+	                    <div class="modal-body p-0 row">
+	                        <form action="/tour/loginCheck" method="POST" class="col-10 mx-auto">
+								<button type="button" class="close text-black mt-3" data-dismiss="modal">&times;</button>
+								<div class="form-group mt-5">
+									<label for="userId" class="d-flex justify-content-start">ID</label>
+									<input type="text" class="form-control" id="userId" name="userId" placeholder="ID를 입력해주세요">
+								</div>
+								<div class="form-group">
+									<label for="userPw" class="d-flex justify-content-start">비밀번호</label>
+									<input type="password" class="form-control" id="userPw" name="userPw" placeholder="비밀번호를 입력해주세요">
+									<input type="hidden" id="userUrl" name="userUrl">
+								</div>
+									<button type="submit" id="login" class="btn btn-primary btn-block mt-1">로그인</button>
+								<br>
+								<div class="row justify-content-center" id="linkweb">
+								<!-- 외부 로그인 버튼 -->
+								  	<div class="col-6 pr-1" id="naver_id_login">
+								  		<script>
+								  		//네이버아이디로로그인 버튼 노출 영역
+									  	var naver_id_login = new naver_id_login("r8IBm_LEPcmDExkJuuzi", "http://localhost/tour/busanTour/login/callback");
+									  	var state = naver_id_login.getUniqState();
+									  	naver_id_login.setButton("green", 3,45);
+									  	naver_id_login.setDomain("YOUR_SERVICE_URL");
+									  	naver_id_login.setState(state);
+									  	naver_id_login.setPopup();
+									  	naver_id_login.init_naver_id_login();
+								  		</script>
+								  	</div>
+								  	<div class="col-6 pl-1 mb-2" id="cursor">
+								  		<img id="kakao"src="./img/kakaoLogin.png" alt="카카오" th:src="@{/img/kakaoLogin.png}" class="mx-1 w-100" style="cursor: pointer; width:95%">
+								  		<script>
+									  		//<![CDATA[
+									        // 사용할 앱의 JavaScript 키를 설정해 주세요.
+									        Kakao.init('11f343dcf94621322ce37f1e710e554d');
+									        // 카카오 로그인 버튼을 생성합니다.
+									        Kakao.Auth.createLoginButton({
+									            container: '#kakao',
+									            success: function (authObj) {
+									                alert(JSON.stringify(authObj));
+									            },
+									            fail: function (err) {
+									                alert(JSON.stringify(err));
+									            }
+									        });
+									     	//]]>
+								  		</script>
+								  	</div>
+								</div>
+								<div class="from-row float-right mt-5">
+									<p>회원이 아니신가요?</p>
+									<hr>
+									<button type="button" class="btn btn-secondary mb-3">
+										<a href="/tour/openSignUp" class="text-white">회원가입</a>
+									</button>
+								</div>
+							</form>
+	                    </div>
+	                </div>
+	            </div>
+        	</div>
+            <button type="button" class="border border-0 bg-white btn1" id="btn2">
+                <a href="/tour/openSignUp" class="text-dark pl-2" style="border-left:1px solid lightgray">회원가입</a>
+            </button>
+        </div>
+        <div class="container" align="right">
+            <button class="border border-0 bg-white mb-2 pr-0">
+                <p th:if="${session.userId} != null" th:text="|${session.nickname}(${session.userId}) 님|" id="click2" class="my-1"></p>               
+            </button>
+            <button class="border border-0 bg-white mb-2">
+                <a href="/tour/logout" class="btn btn-outline py-0 pl-2 mb-1" style="border-left:1px solid lightgray" th:if="${session.userId} != null" th:text="|로그 아웃|" id="click2"></a>
+            </button>
+        </div>  
+        <nav class="navbar navbar-expand-sm bg-light shadow mb-4">
+            <div class="container">
+            <div>
+                <a class="navbar-brand mr-5" href="/tour/busanTour">
+                    <img src="./img/Logo.png" alt="메인로고" th:src="@{/img/Logo.png}" style="width: 25%; height: 25%;">
+                </a>
+            </div>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/tour/transport" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">교통</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/area" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">지역</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/food" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">먹거리</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/cos" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">코스</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/pickList" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">추천</button>
+                    </a>
+                </li>
+            </ul>
+            </div>
+        </nav>      
+    </header>
+        <article class="container">
+            <div class="page-header">
+                <div class="col-md-6 col-md-offset-3">
+	                <h3>회원가입</h3>
+                </div>
+            </div>
+            <div class="container">
+            	<div class="row ">
+            <div class="col-sm-6 offset-md-3">
+            <iframe src="#" name="iframe" style="width:1px; height:1px; border:0; visibility:hidden;"></iframe>
+                <form role="form" action="/tour/signUpPage" method="POST" name="joina" target="iframe">
+                    <div class="form-group mb-4" style="font-weight:bold">
+                        <label for="userId">아이디</label>
+                        <input type="text" class="form-control" name="userId" id="userId1" placeholder="ID">
+                        <div class="check_font mt-1 ml-1" id="id_check"></div>
+                    </div>
+                    <div class="form-group"  style="font-weight:bold">
+                        <label for="userPw">비밀번호</label>
+                        <input type="password" class="form-control"name="userPw" id="userPw1" placeholder="password">
+                        <div class="check_font mt-1 ml-1" id="pw_check"></div>
+                    </div>
+                    <div class="form-group"  style="font-weight:bold">
+                        <label for="" id="userPwCheck">비밀번호 확인</label>
+                        <input type="password" class="form-control" name="userPwCheck1" id="userPwCheck1" placeholder="password">
+                    </div>
+                    <div class="form-group mb-4"  style="font-weight:bold">
+                        <label for="nickname">닉네임</label>
+                        <input type="text" class="form-control" id="nickname" name="nickname" placeholder="NickName">
+                        <div class="check_font mt-1 ml-1" id="nickname_check"></div>
+                    </div>
+                    <div class="form-group mb-4"  style="font-weight:bold">
+                        <label for="userEmail">이메일</label>
+                        <input type="email" class="form-control" id="userEmail" name="userEmail" placeholder="@example.com">
+                        <div class="check_font mt-1 ml-1" id="email_check"></div>
+                    </div>
+                    <div class="form-group"  style="font-weight:bold">
+                    	<label>약관 동의</label>
+                    	<div data-toggle="buttons">
+                    		<label class="btn active mb-0">		<!--  autocomplete="off" checked-->
+                    			<input id="agree" name="agree" type="checkbox">
+                    		</label>
+                    		<a href="#">이용약관</a>에 동의합니다.
+                    	</div>
+                    </div>
+                    <div class="form-group text-center">
+                    	<div class="form-row float-left">
+	                        <button type="button"class="btn btn-secondary">
+	                        	<a href="/tour/busanTour" class="text-white">뒤로 가기</a>
+	                        </button>
+	                    </div>
+	                    <div class="form-row float-right">
+	                        <button data-toggle="modal" data-target="#modal2" id="join" type="submit" class="btn btn-primary">
+	                            회원가입<i class="fa fa-check spaceLeft"></i>
+	                        </button>
+	                        <div class="modal" id="modal2" >
+								<div class="modal-dialog modal-md modal-dialog-centered">
+									<div class="modal-content" id="modalbg">
+										<div class="modal-body p-0">
+											<div class="mx-auto">
+												<h2 class="text-center my-4">환영합니다!</h2>
+												<h6>회원가입을 축하합니다.</h6>
+												<div class="d-flex justify-content-center">
+													<h6>아이디는 <h6 id="userIdConfirm"> </h6> 입니다.</h6>
+												</div>
+											</div>
+											<div class="d-flex justify-content-center mt-2 mb-5">
+						            			<div class="form">
+							            			<button data-toggle="modal" data-target="#modal1" type="button" class="btn btn-primary btn-md" id="btn1" data-dismiss="modal">로그인</button>
+													<a href="/tour/busanTour" class="btn btn-primary btn-md">홈으로</a>
+												</div>
+					           				</div>
+										</div>
+									</div>
+								</div>
+							</div>
+                    	</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+        </article>
+    <footer class="jumbotron mt-5">
+		<h6 align="center">이 사이트는 Chrome 1920x1080 해상도에 최적화되어 있습니다.</h6>
+    </footer>
+    </body>
+</html>
+	
