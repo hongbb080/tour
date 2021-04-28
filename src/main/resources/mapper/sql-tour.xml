@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tour.mapper.TourMapper">
+	<!-- 로그인 부분 -->
+	<select id="selectUserInfoYn" parameterType="map" resultType="int">
+		<![CDATA[
+			select 
+				count(*) as cnt 
+			from 
+				member 
+			where 
+				user_id = #{userId} 
+			and 
+				user_pw = #{userPw}
+		 ]]>
+	</select>
+	
+	<select id="getnickname" parameterType="String" resultType="String">
+		<![CDATA[ 
+			select
+				nickname
+			from
+				member
+			where
+				user_id = #{userId}
+		]]>
+	</select>
+	
+	<!-- 회원가입 -->
+	<insert id="signUpPage" parameterType="tour.dto.UserDto">
+		<![CDATA[
+			insert into member 
+				(user_id, user_pw, nickname, user_email, joined_date) 
+			values 
+				(#{userId}, #{userPw}, #{nickname}, #{userEmail}, now())
+		]]>
+	</insert>
+	
+	<!-- 아이디 중복 체크 -->
+	<select id="userIdCheck" parameterType="map" resultType="int">
+		<![CDATA[
+			select 
+				count(*)
+			from 
+				member 
+			where 
+				user_id = #{userId}
+		 ]]>
+	</select>
+	
+	<!-- 닉네임 중복 체크 -->
+	<select id="userNickNameCheck" parameterType="map" resultType="int">
+		<![CDATA[ 
+			select
+				count(*)
+			from
+				member
+			where
+				nickname = #{nickname}
+		]]>
+	</select>
+	
+	<!-- 이메일 중복 체크 -->
+	<select id="userEmailCheck" parameterType="map" resultType="int">
+		<![CDATA[ 
+			select
+				count(*)
+			from
+				member
+			where
+				user_email = #{userEmail}
+		]]>
+	</select>
+	
+	<!-- 지역 명소 리스트 -->
+	<select id="getDbAreaList" parameterType="String" resultType="tour.dto.TourDto">
+		<![CDATA[ 
+			select 
+				num, UC_SEQ, ADDR1, GUGUN_NM, MAIN_TITLE, SUBTITLE, HOMEPAGE_URL, TRFC_INFO, MIDDLE_SIZE_RM1,
+    			ITEMCNTNTS, MAIN_IMG_THUMB, MAIN_IMG_NORMAL, LNG, LAT, CNTCT_TEL , USAGE_DAY_WEEK_AND_TIME, TITLE
+			from 
+				attraction
+			where
+				GUGUN_NM = #{GUGUNNM}
+		]]>
+	</select>
+	
+	<!-- api용 -->
+	<select id="getDbAreaListRange"  resultType="tour.dto.TourDto">
+		<![CDATA[
+			select 
+				num, UC_SEQ, ADDR1, GUGUN_NM, MAIN_TITLE, SUBTITLE, HOMEPAGE_URL, TRFC_INFO, MIDDLE_SIZE_RM1, 
+    			ITEMCNTNTS, MAIN_IMG_THUMB, MAIN_IMG_NORMAL, LNG, LAT, CNTCT_TEL , USAGE_DAY_WEEK_AND_TIME, TITLE
+			from 
+				attraction
+		 ]]>
+	</select>
+	
+	<!-- api 저장죵 -->
+	<insert id="setDbArea" parameterType="tour.dto.TourDto">
+		<![CDATA[
+			insert into attraction
+				(num, UC_SEQ, ADDR1, GUGUN_NM, MAIN_TITLE, SUBTITLE, HOMEPAGE_URL, TRFC_INFO, MIDDLE_SIZE_RM1, 
+    			ITEMCNTNTS, MAIN_IMG_THUMB, MAIN_IMG_NORMAL, LNG, LAT, CNTCT_TEL , USAGE_DAY_WEEK_AND_TIME, TITLE) 
+			values
+				(#{num}, #{UCSEQ}, #{ADDR1},#{GUGUNNM}, #{MAINTITLE}, #{SUBTITLE}, #{HOMEPAGEURL}, #{TRFCINFO}, #{MIDDLESIZERM1}, 
+				 #{ITEMCNTNTS}, #{MAINIMGTHUMB},#{MAINIMGNORMAL}, #{LNG}, #{LAT}, #{CNTCTTEL}, #{USAGEDAYWEEKANDTIME}, #{TITLE}
+				)
+		 ]]>
+		
+	</insert>
+	
+	<!-- 디테일 부분 -->
+	<select id="getDbAreaDetail" parameterType="String" resultType="tour.dto.TourDto">
+		<![CDATA[ 
+			select 
+				num, UC_SEQ, ADDR1, GUGUN_NM, MAIN_TITLE, SUBTITLE, HOMEPAGE_URL, TRFC_INFO, MIDDLE_SIZE_RM1, 
+    			ITEMCNTNTS, MAIN_IMG_THUMB, MAIN_IMG_NORMAL, LNG, LAT, CNTCT_TEL, USAGE_DAY_WEEK_AND_TIME, TITLE
+			from 
+				attraction
+			where
+				num = #{num}
+		]]>
+	</select>
+	
+	<!-- 먹거리 리스트 -->
+	<select id="getDbFoodList" resultType="tour.dto.TourFoodDto">
+		<![CDATA[ 
+			select 
+				num, UC_SEQ, MAIN_TITLE, CNTCT_TEL, MAIN_IMG_NORMAL, ITEMCNTNTS, PLACE, ADDR2, USAGE_DAY_WEEK_AND_TIME,
+    			GUGUN_NM, ADDR1, RPRSNTV_MENU, HOMEPAGE_URL, TITLE, MAIN_IMG_THUMB, LAT, LNG
+			from 
+				restaurant
+			where
+				GUGUN_NM = #{GUGUNNM}
+		]]>
+	</select>
+	
+	<!-- 먹거리 api -->
+	<select id="getDbFoodListRange" resultType="tour.dto.TourFoodDto">
+		<![CDATA[
+			select 
+				num, UC_SEQ, MAIN_TITLE, CNTCT_TEL, MAIN_IMG_NORMAL, ITEMCNTNTS, PLACE, ADDR2, USAGE_DAY_WEEK_AND_TIME,
+    			GUGUN_NM, ADDR1, RPRSNTV_MENU, HOMEPAGE_URL, TITLE, MAIN_IMG_THUMB, LAT, LNG
+			from 
+				restaurant
+		 ]]>
+	</select>
+	
+	<!-- 먹거리 api -->
+	<insert id="setDbFood" parameterType="tour.dto.TourFoodDto">
+		<![CDATA[
+			insert into restaurant
+				(num, UC_SEQ, MAIN_TITLE, CNTCT_TEL, MAIN_IMG_NORMAL, ITEMCNTNTS, PLACE, ADDR2, USAGE_DAY_WEEK_AND_TIME,
+    			GUGUN_NM, ADDR1, RPRSNTV_MENU, HOMEPAGE_URL, TITLE, MAIN_IMG_THUMB, LAT, LNG) 
+			values
+				(#{num}, #{UCSEQ}, #{MAINTITLE}, #{CNTCTTEL},  #{MAINIMGNORMAL}, #{ITEMCNTNTS}, #{PLACE}, #{ADDR2}, 
+				#{USAGEDAYWEEKANDTIME}, #{GUGUNNM},  #{ADDR1}, #{RPRSNTVMENU}, #{HOMEPAGEURL}, #{TITLE}, #{MAINIMGTHUMB}, #{LAT}, #{LNG}
+				)
+		 ]]>
+	</insert>
+	
+	<!-- 먹거리 디테일 -->
+	<select id="getDbFoodDetail" resultType="tour.dto.TourFoodDto">
+		<![CDATA[ 
+			select 
+				num, UC_SEQ, MAIN_TITLE, CNTCT_TEL, MAIN_IMG_NORMAL, ITEMCNTNTS, PLACE, ADDR2, USAGE_DAY_WEEK_AND_TIME,
+    			GUGUN_NM, ADDR1, RPRSNTV_MENU, HOMEPAGE_URL, TITLE, MAIN_IMG_THUMB, LAT, LNG
+			from 
+				restaurant
+			where
+				num = #{num}
+		]]>
+	</select>
+</mapper>
