@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>부산여행</title>
+
+<link rel="stylesheet" href="/css/bootstrap.css" th:href="@{/css/bootstrap.css}">
+<script src="/js/jquery-3.5.1.js" th:src="@{/js/jquery-3.5.1.js}"></script>
+<script src="/js/popper.min.js" th:src="@{/js/popper.min.js}"></script>
+<script src="/js/bootstrap.js" th:src="@{/js/bootstrap.js}"></script>
+
+<!-- 네이버 -->
+<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+<!-- 카카오 -->
+<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap');
+
+  html {
+      font-family: 'Black Han Sans', sans-serif;
+  }
+
+  h3 {
+      font-weight:700;
+  }
+</style>
+<script type="text/javascript">
+	$(document).ready(function() {
+
+	var uc = (Math.floor((Math.random() * 25)))+1;
+	var uc1 = (Math.floor((Math.random() * 25)))+25;
+	var uc2 = (Math.floor((Math.random() * 50)))+50;
+
+		$.ajax({
+		url:"/tour/tourAreaApiData",
+		type: "POST",
+		dataType: "json",
+		success: function(data) {
+			for(var i = uc; i< uc+3; i++) {
+				var result = "<div class='card shadow mx-3 col-sm p-0'>";
+				result += "<img src="+ data[i].main_IMG_THUMB +" class='card-img-top' style='width: 100%;'>";
+				result += "<div class='card-body'>";
+				result += "<h4 class='card-title'>" + data[i].main_TITLE + "</h4>";
+				result += "<p>" + data[i].subtitle + "</p>";
+				result += "<a href='/tour/areaDetail/" + data[i].num + "' class='btn stretched-link'></a>";
+				result += "</div>" + "</div>";
+				$("#reco").append(result);
+			}
+			for(var i = uc1; i< uc1+3; i++) {
+				var result = "<div class='card shadow mx-3 col-sm p-0'>";
+				result += "<img src="+ data[i].main_IMG_THUMB +" class='card-img-top' style='width: 100%;'>";
+				result += "<div class='card-body'>";
+				result += "<h4 class='card-title'>" + data[i].main_TITLE + "</h4>";
+				result += "<p>" + data[i].subtitle + "</p>";
+				result += "<a href='/tour/areaDetail/" + data[i].num + "' class='btn stretched-link'></a>";
+				result += "</div>" + "</div>";
+				$("#reco2").append(result);
+			}
+			for(var i = uc2; i< uc2+3; i++) {
+				var result = "<div class='card shadow mx-3 col-sm p-0'>";
+				result += "<img src="+ data[i].main_IMG_THUMB +" class='card-img-top' style='width: 100%;'>";
+				result += " <div class='card-body'>";
+				result += "<h4 class='card-title'>" + data[i].main_TITLE + "</h4>";
+				result += "<p>" + data[i].subtitle + "</p>";
+				result += "<a href='/tour/areaDetail/" + data[i].num + "' class='btn stretched-link'></a>";
+				result += "</div>" + "</div>";
+				$("#pop").append(result);
+			}
+			},
+			error:function() {
+				alert("ajax 통신에 오류가 발생했습니다.")
+			}
+		});
+		currentUrl();
+ 	});
+	function currentUrl() {
+		var link = location.href;
+		var urls = link.split("/tour");
+		var result = "/tour" + urls[1];
+		
+		$("#userUrl").val(result);
+	}
+</script>
+</head>
+<body>
+    <header>
+        <div align="right" class="div1 container" th:unless="${session.userId} != null" style="height:24px">
+            <button data-toggle="modal" data-target="#modal1" type="button" class="border border-0 bg-white mb-2 btn1 pr-0" id="btn1">
+                <p class="text-dark mb-0">로그인</p>
+            </button>
+            <div class="modal" id="modal1" data-backdrop="static">
+            <div class="modal-dialog modal-md modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body p-0 row">
+                        <form action="/tour/loginCheck" method="POST" class="col-10 mx-auto">
+                        	<button type="button" class="close text-black mt-3" data-dismiss="modal" onclick="controlParent('reload')">&times;</button>
+							<div class="form-group mt-5">
+								<label for="userId" class="d-flex justify-content-start">ID</label>
+								<input type="text" class="form-control" id="userId" name="userId" placeholder="ID를 입력해주세요" required>
+							</div>
+							<div class="form-group">
+								<label for="userPw" class="d-flex justify-content-start">비밀번호</label>
+								<input type="password" class="form-control" id="userPw" name="userPw" placeholder="비밀번호를 입력해주세요" required>
+								<input type="hidden" id="userUrl" name="userUrl">
+							</div>
+								<button type="submit" id="login" class="btn btn-primary btn-block mt-1">로그인</button>
+							<br>
+							<div class="row justify-content-center" id="linkweb">
+							<!-- 외부 로그인 버튼 -->
+							  	<div class="col-6 pr-1" id="naver_id_login">
+							  		<script>
+							  		//네이버아이디로로그인 버튼 노출 영역
+								  	var naver_id_login = new naver_id_login("r8IBm_LEPcmDExkJuuzi", "http://localhost/tour/busanTour/login/callback");
+								  	var state = naver_id_login.getUniqState();
+								  	naver_id_login.setButton("green", 3,45);
+								  	naver_id_login.setDomain("YOUR_SERVICE_URL");
+								  	naver_id_login.setState(state);
+								  	naver_id_login.setPopup();
+								  	naver_id_login.init_naver_id_login();
+							  		</script>
+							  	</div>
+							  	<div class="col-6 pl-1 mb-2" id="cursor">
+							  		<img id="kakao"src="./img/kakaoLogin.png" alt="카카오" th:src="@{/img/kakaoLogin.png}" class="mx-1" style="cursor: pointer; width:95%">
+							  		<script>
+								  		//<![CDATA[
+								        // 사용할 앱의 JavaScript 키를 설정해 주세요.
+								        Kakao.init('11f343dcf94621322ce37f1e710e554d');
+								        // 카카오 로그인 버튼을 생성합니다.
+								        Kakao.Auth.createLoginButton({
+								            container: '#kakao',
+								            success: function (authObj) {
+								                alert(JSON.stringify(authObj));
+								            },
+								            fail: function (err) {
+								                alert(JSON.stringify(err));
+								            }
+								        });
+								     	//]]>
+							  		</script>
+							  	</div>
+							</div>
+							<div class="from-row float-right mt-5">
+								<p>회원이 아니신가요?</p>
+								<hr>
+								<button type="button" class="btn btn-secondary mb-3">
+									<a href="/tour/openSignUp" class="text-white">회원가입</a>
+								</button>
+							</div>
+						</form>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <button type="button" class="border border-0 bg-white btn1" id="btn2">
+                <a href="/tour/openSignUp" class="text-dark pl-2" style="border-left:1px solid lightgray">회원가입</a>
+            </button>
+        </div>
+        <div class="container" align="right">
+            <button class="border border-0 bg-white mb-2 pr-0">
+                <p th:if="${session.userId} != null" th:text="|${session.nickname}(${session.userId}) 님|" id="click2" class="my-1"></p>               
+            </button>
+            <button class="border border-0 bg-white mb-2">
+                <a href="/tour/logout" class="btn btn-outline py-0 pl-2 mb-1" style="border-left:1px solid lightgray" th:if="${session.userId} != null" th:text="|로그 아웃|" id="click2"></a>
+            </button>
+        </div>  
+        <nav class="navbar navbar-expand-sm bg-light shadow mb-4">
+            <div class="container">
+            <div>
+                <a class="navbar-brand mr-5" href="/tour/busanTour">
+                    <img src="./img/Logo.png" alt="메인로고" th:src="@{/img/Logo.png}" style="width: 25%; height: 25%;">
+                </a>
+            </div>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/tour/transport" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">교통</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/area" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">지역</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/food" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">먹거리</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/cos" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">코스</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/pickList" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">추천</button>
+                    </a>
+                </li>
+            </ul>
+            </div>
+        </nav>      
+    </header>
+    <main>
+    	<div class="container">
+        <div id="imgslider" class="carousel slide carousel-fade" data-ride="caroisel">
+            <ul class="carousel-indicators">
+                <li data-target="#imgslider" data-slide-to="0" class="active"></li>
+                <li data-target="#imgslider" data-slide-to="1"></li>
+                <li data-target="#imgslider" data-slide-to="2"></li>
+            </ul>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/img/0002.jpg" alt="메인이미지1" th:src="@{/img/0002.jpg}" style="width: 100%; height:100%;">
+                    <div class="carousel-caption">
+                    <h4>역사와 문화 그리고 예술이 만난 감성골목, 감천문화마을</h4>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="/img/004.jpg" alt="메인이미지2" th:src="@{/img/004.jpg}" style="width: 100%; height:100%;">
+                    <div class="carousel-caption">
+                    <h4>새롭게 태어난 부산의 랜드마크, 부산항대교</h4>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="/img/부산항5.jpg" alt="메인이미지1" th:src="@{/img/부산항5.jpg}" style="width: 100%; height:100%;">
+                    <div class="carousel-caption">
+                    <h4>대한민국 수출의 대동맥, 부산신항</h4>
+                    </div>
+                </div>
+            </div>
+            <a href="#imgslider" class="carousel-control-prev" data-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </a>
+            <a href="#imgslider" class="carousel-control-next" data-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </a>
+        </div>
+        </div>
+        <div class="container mt-5">
+            <h2 class="font-weight-bold mt-4">추천</h2>
+            <div class="row" id="reco">
+            </div>
+            <div class="row mt-4" id="reco2">
+            </div>
+            <h2 class="font-weight-bold mt-4">인기</h2>
+            <div class="row mb-3" id="pop">
+            </div>
+        </div>
+    </main>
+    <footer class="jumbotron mt-5">
+		<h6 align="center">이 사이트는 Chrome 1920x1080 해상도에 최적화되어 있습니다.</h6>
+    </footer>
+</body>
+</html>
