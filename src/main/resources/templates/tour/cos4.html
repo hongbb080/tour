@@ -1,0 +1,815 @@
+
+
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>동부산 서부산 정복코스</title>
+
+
+<!-- 스프링용  -->
+
+<link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+
+<script th:src="@{/js/jquery-3.5.1.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+
+<!-- 비주얼코드용 -->
+
+<link rel="stylesheet" href="./css/bootstrap.css">
+
+<script src="./js/jquery-3.5.1.js"></script>
+<script src="./js/popper.min.js"></script>
+<script src="./js/bootstrap.js"></script>
+
+<script type="text/javascript">
+
+// var $menuEle = $('dt'); // 탭메뉴를 변수에 지정
+// $menuEle.click(function() { // 탭메뉴 클릭 이벤트
+//     $('dd').addClass('hidden');
+//     $(this).next().removeClass('hidden');
+// });
+
+function show_layer(div_name){
+    document.all.div_01.style.display="none";
+    document.all.div_02.style.display="none";
+    //document.all.div_03.style.display="none";
+    //document.all.div_04.style.display="none"; // 메뉴 숫자에 따라 늘려주세요
+    switch(div_name)
+        {
+        case '1':
+        document.all.div_01.style.display="";
+        break;
+
+        case '2':
+        document.all.div_02.style.display="";
+        break;
+        }
+    }
+/// 탭 이동에 따라 내용이 바뀌는 코드
+
+</script>
+<style>
+    /* 기본 헤더적용 글씨체 */
+    @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap');
+    html {
+        font-family: 'Black Han Sans', sans-serif;
+    }
+    /* end */
+    .imgger {
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    ul {
+        text-decoration: none;
+        list-style-type: none;
+    }
+
+    h2 a{
+        font-weight: 700;
+        /* text-decoration: none; */
+        /* color: black; */
+        border:none;
+    }
+
+    h2 a:hover{
+        text-decoration: none;
+        color: blue;
+        border:none;
+    }
+
+    hr {
+        border: 2px solid gray;
+        margin-left: 60px;
+        width: 500px;
+    }
+
+    #p1 {   
+            /* float: left; */
+            width: 100%;
+            height: 100%;
+            background: #7F7FD5;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to top, #91EAE4, #86A8E7, #7F7FD5);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to top, #91EAE4, #86A8E7, #7F7FD5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            margin: 0px;
+            padding: 10px;
+            box-shadow: 0 0 15px 10px #cde6ff;
+            /* background-color: lightgreen; */
+        }
+
+        #p2 {
+            /* float: left; */
+            width: 100%;
+            height: 100%;
+            background: #7F7FD5;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to top, #91EAE4, #86A8E7, #7F7FD5);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to top, #91EAE4, #86A8E7, #7F7FD5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            margin: 0px;
+            padding: 10px;
+            box-shadow: 0 0 15px 10px #cde6ff;
+            /* background-color: lightgreen; */
+
+        }
+        #imgbox {
+
+            width: 200px;
+            height : 200px;
+            /* position:absolute; */
+            margin-left: 30px;
+        }
+
+        #mapbox {
+            float: center;
+            padding: 10px;
+            margin-left: 90px;
+        }
+
+        .jumbotron {
+            background-color: whitesmoke;     /*       점보트론 배경색 변경 */
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;     /*    ★ 중앙정렬용 */
+        }
+        
+        .timeline2 {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;     /*    ★ 중앙정렬용 */
+        }
+
+        .timeline::after {
+            content: "";
+            position:absolute;
+            width: 6px;
+            background-color: white;                /*         중앙분리대 색상 조정 */
+            top: 0px;
+            bottom: 0px;
+            left: 50%;
+            margin-left: -3px;      /*     타임라인 선 위치조정 */
+        }
+        
+        .timeline2::after {
+            content: "";
+            position:absolute;
+            width: 6px;
+            background-color: white;                /*         중앙분리대 색상 조정 */
+            top: 0px;
+            bottom: 0px;
+            left: 50%;
+            margin-left: -3px;      /*     타임라인 선 위치조정 */
+        }
+        
+        	.timeline::before{
+            content: "";
+            background: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0) 10%,
+            rgba(0, 0, 0, 0.25) 25%,
+            rgba(0, 0, 0, 0.5) 50%,
+            rgba(0, 0, 0, 0.75) 75%,
+            rgba(0, 0, 0, 1) 100%
+          ), url(../img/해해수욕장.jpg);
+            background-repeat:no-repeat;
+            background-size: cover;
+            position:absolute;
+            opacity: 0.3;
+            top:0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            height: 100%;  
+            
+        }
+        
+        	.timeline2::before{
+            content: "";
+            background: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0) 10%,
+            rgba(0, 0, 0, 0.25) 25%,
+            rgba(0, 0, 0, 0.5) 50%,
+            rgba(0, 0, 0, 0.75) 75%,
+            rgba(0, 0, 0, 1) 100%
+          ), url(../img/해해수욕장.jpg);
+            background-repeat:no-repeat;
+            background-size: cover;
+            position:absolute;
+            opacity: 0.3;
+            top:0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            height: 100%;              
+        }
+
+        .container2 {
+            padding: 10px 40px;
+            position: relative;
+            background-color:inherit ;
+            /* 전체 크기의 절반 너비를 사용 */
+            width: 50%;
+        }
+        /* 컨테이너 클래스에 after를 사용하여 컨테이너 클래스를 사용하면 자동으로 원형을 그려줌  */
+        .container2::after {
+            content: "";
+            position: absolute;
+            /* 자동으로 그려지는 도형의 크기 */
+            width: 25px;
+            height: 25px;
+            /* border-radius: 50%를 사용하여 네모를 원형으로 변경 */
+            right: -17px;
+            background-color: white;
+            border: 4px solid rgba(2, 6, 219, 0.753);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+	    .left { 
+        
+        	left: 0;
+        
+        	animation-name: myanim;
+	 		animation-duration: 1s;
+        }
+        .right { 
+            position: relative;
+            left: 532px; 
+            
+            animation-name: myanim2;
+	 		animation-duration: 1s;
+        }
+        
+        
+		@keyframes myanim {
+	
+		0% {opacity: 0.0;position: relative;left: 532px;}
+		100% {opacity: 1.0;position: relative;left: 0px;}
+		
+		}
+		
+		@keyframes myanim2 {
+	
+		0% {opacity: 0.0;position: relative;left: 0px;}
+		100% {opacity: 1.0;position: relative;left: 532px;}
+		
+		}
+        
+
+        /* left가 그려지기 전에 추가로 그려짐 */
+        .left::before {
+            content: "";
+            width: 0;
+            height: 0;
+            position: absolute;
+            top: 22px;
+            z-index: 2;
+            right: 20px;         /*    오른쪽으로 30px 띄워진 공간에 뭔가를(텍스트박스를) 띄움 */
+            border: medium solid white;     
+            border-width: 10px 10px 10px 10px;/*     상 우 하 좌 */
+            border-color: transparent transparent transparent white ; /*  말풍선 꼬리표 만들기. 상, 우(좌였던것), 하를 투명으로 하고 왼쪽만 화이트로 삼각형을 줘서 말풍선 효과     */
+        }
+
+        .right::before {
+            content: "";
+            width: 0;
+            height: 0;
+            position: absolute;
+            top: 22px;
+            left: 30px;
+            z-index: 100;
+            border: medium solid white;
+            border-width: 10px 10px 10px 0px;
+            border-color: transparent white transparent transparent;
+        }
+        .left::after {
+            left: 532px;
+            
+            
+        }
+
+        .right::after {
+            left: 0px;
+            
+            
+        }
+        
+        
+        
+
+        .content {
+            padding: 20px 30px;
+            background-color: white;
+            position: relative;
+            border-radius: 5px;
+            top: -40px;
+        }
+        
+        /* 버튼 위치 지정 */
+        
+        .btn11 { position: relative; right: 40px; z-index: 3;}
+        .btn22 { position: relative; left:106%; z-index: 3;}
+        .btn33 { position: relative; right: 40px;z-index: 3;}
+        .btn44 { position: relative; left:106%; z-index: 3;}
+        .btn55 { position: relative; right: 40px;z-index: 3;}
+        .btn66 { position: relative; left:106%;z-index: 3;}
+        
+        /* 반응형 웹 집어넣은부분 */
+        
+        
+          @media ( max-width: 1200px ) {
+			
+			
+			
+			.right { 
+            position: relative;
+            left: 532px; 
+        
+        	/* animation-name: myanim;
+	 		animation-duration: 1s; */
+        	}
+        	
+        	.right::before {
+            content: "";
+            width: 0;
+            height: 0;
+            position: absolute;
+            top: 22px;
+            left: -50px;
+            z-index: 100;
+            border: medium solid white;
+            border-width: 10px 10px 10px 0px;
+            border-color: transparent white transparent transparent;
+        }
+        	
+        	.right::after {
+            left:-90px;
+            
+            
+        	}
+        	
+        	.right > .content {
+        		
+        		left:-80px;
+        	}
+        	
+        	.left::after {
+            left: 443px;
+            
+            
+        	}
+        	
+        	.btn11, .btn33, .btn55 { right: 125px; }
+        	
+        
+			
+			
+		}
+		
+		@media ( max-width: 992px ) {
+			
+			
+			
+			.right { 
+            left: 0;
+        
+        	animation-name: myanim;
+	 		animation-duration: 1s;
+        	}
+        	
+        	.right::before {
+            content: "";
+            width: 0;
+            height: 0;
+            position: absolute;
+            top: 22px;
+            z-index: 2;
+            left: 495px;         /*    오른쪽으로 30px 띄워진 공간에 뭔가를(텍스트박스를) 띄움 */
+            border: medium solid white;     
+            border-width: 10px 10px 10px 10px;/*     상 우 하 좌 */
+            border-color: transparent transparent transparent white ; /*  말풍선 꼬리표 만들기. 상, 우(좌였던것), 하를 투명으로 하고 왼쪽만 화이트로 삼각형을 줘서 말풍선 효과     */
+        	}
+        	
+        	.right::after {
+            left: 525px;
+            
+            
+        	}
+        	
+        	.right > .content {
+        		
+        		left:0px;
+        	}
+        	
+        	
+        	.left::after {
+            left: 525px;
+            
+            
+        	}
+        	
+        	
+        	.btn11, .btn22, .btn33, .btn44, .btn55, .btn66 { left:106%;}
+        	
+        	
+        	
+        	
+        	.timeline::after {
+            content: "";
+            position:absolute;
+            width: 6px;
+            background-color: white;                /*         중앙분리대 색상 조정 */
+            top: 0px;
+            bottom: 0px;
+            left: 50%;
+            margin-left: 200px;      /*     타임라인 선 위치조정 */
+       		}
+       		
+       		.timeline2::after {
+            content: "";
+            position:absolute;
+            width: 6px;
+            background-color: white;                /*         중앙분리대 색상 조정 */
+            top: 0px;
+            bottom: 0px;
+            left: 50%;
+            margin-left: 200px;      /*     타임라인 선 위치조정 */
+       		}
+       		 
+       		 .container2 {
+            padding: 10px 40px;
+            position: relative;
+            background-color:inherit ;
+            /* 전체 크기의 절반 너비를 사용 */
+            width: 80%;
+        	}
+        	
+        	
+        	 .container2::after {
+            content: "";
+            position: absolute;
+            /* 자동으로 그려지는 도형의 크기 */
+            width: 25px;
+            height: 25px;
+            /* border-radius: 50%를 사용하여 네모를 원형으로 변경 */
+            right: -17px;
+            background-color: white;
+            border: 4px solid rgba(2, 6, 219, 0.753);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 2;
+       		 }
+        
+			
+			
+		}
+		
+ 		@media ( max-width: 768px ) { 
+		
+			body {
+				width:870px;
+			}
+			
+			.right::before {
+			    content: "";
+			    width: 0;
+			    height: 0;
+			    position: absolute;
+			    top: 22px;
+			    z-index: 2;
+			    left: 350px;
+			    border: medium solid white;
+			    border-width: 10px 10px 10px 10px;
+			    border-color: transparent transparent transparent white;
+			}
+		}
+		 
+        /*  ========================== */
+</style>
+</head>
+<body>          
+    <!-- 네비바 시작 -->
+    <header>
+        <div align="right" class="div1 container" th:unless="${session.userId} != null" style="height:24px">
+            <button data-toggle="modal" data-target="#modal1" type="button" class="border border-0 bg-white mb-2 btn1 pr-0" id="btn1">
+                <p class="text-dark mb-0">로그인</p>
+            </button>
+            <div class="modal" id="modal1" data-backdrop="static">
+            <div class="modal-dialog modal-md modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body p-0 row">
+                        <form action="/tour/loginCheck" method="POST" class="col-10 mx-auto">
+                        	<button type="button" class="close text-black mt-3" data-dismiss="modal" onclick="controlParent('reload')">&times;</button>
+							<div class="form-group mt-5">
+								<label for="userId" class="d-flex justify-content-start">ID</label>
+								<input type="text" class="form-control" id="userId" name="userId" placeholder="ID를 입력해주세요">
+							</div>
+							<div class="form-group">
+								<label for="userPw" class="d-flex justify-content-start">비밀번호</label>
+								<input type="password" class="form-control" id="userPw" name="userPw" placeholder="비밀번호를 입력해주세요">
+								<input type="hidden" id="userUrl" name="userUrl">
+							</div>
+								<button type="submit" id="login" class="btn btn-primary btn-block mt-1">로그인</button>
+							<br>
+							<div class="row justify-content-center" id="linkweb">
+							<!-- 외부 로그인 버튼 -->
+							  	<div class="col-6 pr-1" id="naver_id_login">
+							  		<script>
+							  		//네이버아이디로로그인 버튼 노출 영역
+								  	var naver_id_login = new naver_id_login("r8IBm_LEPcmDExkJuuzi", "http://localhost/tour/busanTour/login/callback");
+								  	var state = naver_id_login.getUniqState();
+								  	naver_id_login.setButton("green", 3,45);
+								  	naver_id_login.setDomain("YOUR_SERVICE_URL");
+								  	naver_id_login.setState(state);
+								  	naver_id_login.setPopup();
+								  	naver_id_login.init_naver_id_login();
+							  		</script>
+							  	</div>
+							  	<div class="col-6 pl-1 mb-2" id="cursor">
+							  		<img id="kakao"src="./img/kakaoLogin.png" alt="카카오" th:src="@{/img/kakaoLogin.png}" class="mx-1 w-100" style="cursor: pointer; width:95%">
+							  		<script>
+								  		//<![CDATA[
+								        // 사용할 앱의 JavaScript 키를 설정해 주세요.
+								        Kakao.init('11f343dcf94621322ce37f1e710e554d');
+								        // 카카오 로그인 버튼을 생성합니다.
+								        Kakao.Auth.createLoginButton({
+								            container: '#kakao',
+								            success: function (authObj) {
+								                alert(JSON.stringify(authObj));
+								            },
+								            fail: function (err) {
+								                alert(JSON.stringify(err));
+								            }
+								        });
+								     	//]]>
+							  		</script>
+							  	</div>
+							</div>
+							<div class="from-row float-right mt-5">
+								<p>회원이 아니신가요?</p>
+								<hr>
+								<button type="button" class="btn btn-secondary mb-3">
+									<a href="/tour/openSignUp" class="text-white" >회원가입</a>
+								</button>
+							</div>
+						</form>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <button type="button" class="border border-0 bg-white btn1" id="btn2">
+                <a href="/tour/openSignUp" class="text-dark pl-2" style="border-left:1px solid lightgray">회원가입</a>
+            </button>
+        </div>
+        <div class="container" align="right">
+            <button class="border border-0 bg-white mb-2 pr-0">
+                <p th:if="${session.userId} != null" th:text="|${session.nickname}(${session.userId}) 님|" id="click2"></p>                   
+            </button>
+            <button class="border border-0 bg-white mb-2">
+                <a href="/tour/logout" class="btn btn-outline py-0 pl-2 mb-1" style="border-left:1px solid lightgray" th:if="${session.userId} != null" th:text="|로그 아웃|" id="click2"></a>
+            </button>
+        </div>  
+        <nav class="navbar navbar-expand-sm bg-light shadow mb-4">
+            <div class="container">
+            <div>
+                <a class="navbar-brand mr-5" href="/tour/busanTour">
+                    <img src="./img/Logo.png" alt="메인로고" th:src="@{/img/Logo.png}" style="width: 25%; height: 25%;">
+                </a>
+            </div>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/tour/transport" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">교통</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/area" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">지역</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/food" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">먹거리</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/cos" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">코스</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/pickList" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">추천</button>
+                    </a>
+                </li>
+            </ul>
+            </div>
+        </nav>      
+    </header>
+    
+    <!-- 네비바 끝 -->
+        <main>
+            <div class="container">
+                    <div id="div_01">
+                        <section>
+                            <div class="imgger">
+                                <img src="./img/부산코스 (4).jpg" alt="1" th:src="@{/img/부산코스 (4).jpg}" id="pw" width="640px" height="360px">        <!--  메인 이미지 삽입 공간 -->
+                            </div>
+                        
+                        <br><br><br>
+                        
+                        <div class="list">
+                            <ul class="row" style="margin-left: 30px;">
+                                <li><h2 style="color:blue"><a href="javascript:show_layer('1');">1일차&nbsp;&nbsp;&nbsp;&nbsp;</a></h2></li>
+                                <li><h2><a href="javascript:show_layer('2');">2일차&nbsp;&nbsp;&nbsp;&nbsp;     </a></h2></li>
+                            </ul>
+                            <hr><br><br>
+                        </div>
+                        </section>
+                        <section>
+                            <div id="p1">
+                                <div class="timeline">
+                                    <!-- 1박2일 1번 : 서부산 동부산 관광코스 -->
+                                        <div class="container2 left">
+                                            <div class="content">
+                                                <h2>부산역 출발!</h2>
+                                                <p> 9시정도면 되겠지? </p>
+                                            </div>
+                                        </div>
+                                
+                                        <div class="container2 right">
+                                        	<button type="button" class="btn btn-white btn11"  onclick="location.href=' https://blog.naver.com/yah7602/221171414749' "></button>
+                                            <div class="content">
+                                                <h2>태종대로 이동</h2>
+                                                <p> 부산버스 68 88 101번 승차</p>
+                                            </div>
+                                        </div>
+                                
+                                        <div class="container2 left">
+                                        	<button type="button" class="btn btn-white btn22"  onclick="location.href=' https://www.bisco.or.kr/taejongdae/' "></button>
+                                            <div class="content">
+                                                <h2>태종대에서 풍경 감상</h2>
+                                                <p> 탁트인 바다와 웅장한 바위에 내 가슴도 웅장해진다 <br> 다누비순환열차를 타면 더 편함! </p>
+                                            </div>
+                                        </div>
+                                
+                                        <div class="container2 right">
+                                        	<button type="button" class="btn btn-white btn33"  onclick="location.href=' https://blog.naver.com/f_bits05/222302509080' "></button>
+                                            <div class="content">
+                                                <h2>송도해수욕장 도착!</h2>
+                                                <img src="./img/송도해수욕장.jpg" alt="1" th:src="@{/img/송도해수욕장.jpg}" width="90%" height="90%">
+                                            </div>
+                                        </div>
+                                        <div class="container2 left">
+                                        	<button type="button" class="btn btn-white btn44"  onclick="location.href=' https://www.gamcheon.or.kr/' "></button>
+                                            <div class="content">
+                                                <h2>감천문화마을 방문</h2>
+                                                <img src="./img/감천문화마을.jpg" alt="1" th:src="@{/img/감천문화마을.jpg}" width="90%" height="90%">
+                                                <p> 요즘 젊은이들 사이에서 뜬다는 핫플레이스! </p>
+                                            </div>
+                                        </div> 
+                                        <div class="container2 right">
+                                        	<button type="button" class="btn btn-white btn55"  onclick="location.href=' http://gukjemarket.co.kr/' "></button>
+                                            <div class="content">
+                                                <h2>국제시장 방문</h2>
+                                                <p> 영화 국제시장의 무대이기도 한 부산의 대표 시장! 먹거리도 한가득 </p>
+                                            </div>
+                                        </div>
+                                        <div class="container2 left">
+                                        	<button type="button" class="btn btn-white btn66"  onclick="location.href=' https://www.bisco.or.kr/yongdusanpark/' "></button>
+                                            <div class="content">
+                                                <h2>용두산공원 방문</h2>
+                                                <p>부산타워는 야경도 볼만합니다</p>
+                                            </div>
+                                        </div> 
+                                        <div class="container2 right">
+                                            <div class="content">
+                                                <h2>숙소에서 하룻밤</h2>
+                                                <p>  </p>
+                                            </div>
+                                        </div>
+                                        
+
+                                <!--      상세내용 삽입 공간 -->
+                                <!-- left, right 번갈아가며 내용 출력할것 -->
+                                    
+                                </div>
+                            </div>
+                            <!-- 원형버튼
+                                 위부터 차례대로 내려오며 버튼을 흰색으로 만들어 원을 누를때 투명화된 버튼이 같이 눌리는 구조
+                                 새로 버튼을 추가할때마다 left -30px, bottom은 수치가 줄어들수록 낮게 내려오니 맞춰서 조절할것
+                                 링크는 명물 관련 링크
+                            -->
+                            <!-- <button type="button" class="btn btn-primary"  onclick="location.href=' https://blog.naver.com/yah7602/221171414749' "></button>
+                            <button type="button" class="btn btn-primary"  onclick="location.href=' https://www.bisco.or.kr/taejongdae/' "></button>
+                            <button type="button" class="btn btn-primary"  onclick="location.href=' https://blog.naver.com/f_bits05/222302509080' "></button>
+                            <button type="button" class="btn btn-primary"  onclick="location.href=' https://www.gamcheon.or.kr/' "></button>
+                            <button type="button" class="btn btn-primary"  onclick="location.href=' http://gukjemarket.co.kr/' "></button>
+                            <button type="button" class="btn btn-primary"  onclick="location.href=' https://www.bisco.or.kr/yongdusanpark/' "></button> -->
+  	                    </section>
+                        <br><br><br>
+                    </div>
+                            <!-- ================================================== -->
+
+                    <div id="div_02" style="DISPLAY: none">
+                        <section>
+                            <div class="imgger">
+                                <img src="../img/부산코스 (4).jpg" id="pw" width="640px" height="360px">         <!--  메인 이미지 삽입 공간 -->
+                            </div>
+                        
+                        <br><br><br>
+                        
+                        <div class="list">
+                            <ul class="row" style="margin-left: 30px;">
+                                <li><h2><a href="javascript:show_layer('1');">1일차&nbsp;&nbsp;&nbsp;&nbsp;</a></h2></li>
+                                <li><h2 style="color:blue"><a href="javascript:show_layer('2');">2일차&nbsp;&nbsp;&nbsp;&nbsp;     </a></h2></li>
+                            </ul>
+                            <hr><br><br>
+                        </div>
+                        </section>
+                        <section>
+                            <div id="p2">
+                                <div class="timeline2">                                    
+                                        <div class="container2 left">
+                                            <div class="content">
+                                                <h2>기상 직후 출발!</h2>
+                                                <p> 9시정도면 되겠지? </p>
+                                            </div>
+                                        </div>                               
+                                        <div class="container2 right">
+                                        	<button type="button" class="btn btn-white btn11"  onclick="location.href=' https://blog.naver.com/avimss/222312255846' "></button>
+                                            <div class="content">
+                                                <h2>광안대교를 타고 해운대로 이동</h2>
+                                                <p> 시원한 광안리 바닷바람을 맞으며~</p>
+                                            </div>
+                                        </div>
+                                
+                                        <div class="container2 left">
+                                        	<button type="button" class="btn btn-white btn22"  onclick="location.href=' https://blog.naver.com/jayooni/222293199296' "></button>
+                                            <div class="content">
+                                                <h2>해운대를 지나쳐 동백산책로 한걸음</h2>
+                                                <img src="../img/동백산책로.jpg" width="90%" height="90%">
+                                            </div>
+                                        </div>
+                                
+                                        <div class="container2 right">
+                                        	<button type="button" class="btn btn-white btn33"  onclick="location.href=' https://blog.naver.com/rinoayuna/222301383378' "></button>
+                                            <div class="content">
+                                                <h2>달맞이고개 방문</h2>
+                                                <p> 카페촌에서 아메리카노 한잔 어떠세요? </p>
+                                            </div>
+                                        </div>
+                                        <div class="container2 left">
+                                        	<button type="button" class="btn btn-white btn44"  onclick="location.href=' http://mtour.interpark.com/freeya/Discovery.aspx?seq=10059' "></button>
+                                            <div class="content">
+                                                <h2>송정해수욕장 방문</h2>
+                                                <p> 부산 바닷가하면 떠오르는 숨은 다크호스! </p>
+                                            </div>
+                                        </div> 
+                                        <div class="container2 right">
+                                        	<button type="button" class="btn btn-white btn55"  onclick="location.href=' http://www.yongkungsa.or.kr/' "></button>
+                                            <div class="content">
+                                                <h2>해동용궁사 방문</h2>
+                                                <img src="../img/해동용궁사.jpg" width="90%" height="90%">
+                                            </div>
+                                        </div>
+                                        <div class="container2 left">
+                                            <div class="content">
+                                                <h2>부산역 도착! 집으로~</h2>
+                                            </div>
+                                        </div>
+
+                                <!--      상세내용 삽입 공간 -->
+                                <!-- left, right 번갈아가며 내용 출력할것 -->
+                                    
+                                </div>
+                            </div>
+                            <!-- 원형버튼
+                                 위부터 차례대로 내려오며 버튼을 흰색으로 만들어 원을 누를때 투명화된 버튼이 같이 눌리는 구조
+                                 새로 버튼을 추가할때마다 left -30px, bottom은 수치가 줄어들수록 낮게 내려오니 맞춰서 조절할것
+                                 링크는 명물 관련 링크
+                            -->
+                            <!-- <button type="button" class="btn btn-primary"  onclick="location.href=' https://blog.naver.com/avimss/222312255846' "></button>
+                            <button type="button" class="btn btn-primary"  onclick="location.href=' https://blog.naver.com/jayooni/222293199296' "></button>
+                            <button type="button" class="btn btn-primary"  onclick="location.href=' https://blog.naver.com/rinoayuna/222301383378' "></button>
+                            <button type="button" class="btn btn-primary"  onclick="location.href=' http://mtour.interpark.com/freeya/Discovery.aspx?seq=10059' "></button>
+                            <button type="button" class="btn btn-primary"  onclick="location.href=' http://www.yongkungsa.or.kr/' "></button>
+                            <button type="button" class="btn btn-white"  onclick="location.href=' http://bupyeong-market.com/' "></button> -->
+
+                        </section>
+                    </div>
+
+                            <!-- ================================================== -->
+        </div>
+        </main>
+        <footer class="jumbotron mt-5">
+		<h6 align="center">이 사이트는 Chrome 1920x1080 해상도에 최적화되어 있습니다.</h6>
+    </footer>
+</body>
+</html>
+
