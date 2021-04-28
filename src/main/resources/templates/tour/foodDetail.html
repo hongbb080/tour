@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+    
+<title>title</title>
+
+<link rel="stylesheet" href="/css/bootstrap.css" th:href="@{/css/bootstrap.css}">
+<script src="/js/jquery-3.5.1.js" th:src="@{/js/jquery-3.5.1.js}"></script>
+<script src="/js/popper.min.js" th:src="@{/js/popper.min.js}"></script>
+<script src="/js/bootstrap.js" th:src="@{/js/bootstrap.js}"></script>
+<!-- 네이버 -->
+<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+<!-- 카카오 -->
+<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+
+<!-- 카카오맵 -->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=5b73cd710069cd4b34b7e28f0a67d832"></script>
+
+<script type="text/javascript">
+var lat;
+var lng;
+var title;
+$(document).ready(function() {
+	var map;
+	
+	var a = $(location).attr('pathname');
+	var uc = a.replace(/[^0-9]/g,"");
+	var sendData = {num : uc};
+	var sendData2 = {uc : uc};
+	$.ajax({
+		url:"/tour/tourFoodDetail",
+		type: "POST",
+		data : sendData,
+		async: false,
+		dataType: "json", 
+		success: function(data) {
+				/* 메인 타이틀 */
+				jQuery('html > head > title').text(data[0].title);
+				/* 메인 타이틀 이미지 */
+				var result = "<div class='text-center my-5'>" + "<h2>" + data[0].title + "</h2>" + "</div>";
+				result += "<div class='imgger'>";
+				result += "<img src=" + data[0].main_IMG_NORMAL + " id='pw' width='100%'>";
+				result += "</div>";
+				$("#main").append(result);
+				
+				/* 설명 */
+				var result2 = "<p>" + data[0].itemcntnts + "</p>";
+				$("#link1").append(result2);
+				
+				/* 이용안내 */
+				var result3 = "<li class='row row11'>"+"<p style='border-right:1px solid gray'class='pr-2 col-sm-1'>" + "주소" + "</p>";
+				result3 += "<span class='pl-3 col-sm-9'>" + data[0].addr1 + "</span></li>";
+				result3 += "<li class='row row12'>"+"<p style='border-right:1px solid gray'class='pr-2 col-sm-1'>" + "전화번호" + "</p>";
+				result3 += "<span class='pl-3 col-sm-9'>" + data[0].cntct_TEL + "</span></li>";
+				result3 += "<li class='row row13'>"+"<p style='border-right:1px solid gray'class='pr-2 col-sm-1'>" + "홈페이지" + "</p>";
+				result3 +="<span class='pl-3 col-sm-9'>" + data[0].homepage_URL + "</span></li>";
+				result3 += "<li class='row row14'>"+"<p style='border-right:1px solid gray'class='pr-2 col-sm-1'>" + "운영시간" + "</p>";
+				result3 += "<span class='pl-3 col-sm-9'>" + data[0].usage_DAY_WEEK_AND_TIME + "</span></li>";
+				$("#link2").append(result3);
+				
+				lat = data[0].lat;
+				lng = data[0].lng;
+				title = data[0].title;
+				setupKakaoMap(lat, lng, title);
+		},
+		error:function() {
+			alert("ajax 통신에 오류가 발생했습니다.")
+		}
+	});
+	$.ajax({
+		url:"/tour/areaDetailReviewList",
+		type: "POST",
+		data : sendData2,
+		success: function(data) {
+			for(var i=0; i < data.length; i++) {
+			var table = "<tr class='row col-12 mx-0 px-0'>";
+			table += "<td class='col-1 text-center pl-0'>" + data[i].reviewnum + "</td>";
+			table += "<td class='col-7 '>" + data[i].comments + "</td>";
+			table += "<td class='col-2 text-center'>" + data[i].nickname + "</td>";
+			table += "<td class='col-2 text-center '>" + data[i].createdtime + "</td>";
+			table += "</tr>";
+			$("#table1").append(table);
+			}
+		}
+	});
+	
+
+	currentUrl();
+	currentnum();
+});
+function setupKakaoMap(lat, lng, title) {
+	/* 지도 표시 부분 */
+	var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+	var options = { //지도를 생성할 때 필요한 기본 옵션
+	center: new kakao.maps.LatLng(lat, lng), //지도의 중심좌표.
+	level: 3 //지도의 레벨(확대, 축소 정도)
+	};
+	
+	map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴 // 전역변수 map
+	var marker = new kakao.maps.Marker({
+		position: new kakao.maps.LatLng(lat, lng), // 마커의 좌표
+		map: map // 마커를 표시할 지도 객체
+	});
+	var iwContent = '<p style="padding:0px;">' + title + '</p>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+
+	// 인포윈도우를 생성합니다
+	var infowindow = new kakao.maps.InfoWindow({
+	    content : iwContent
+	});
+	// 마커에 마우스오버 이벤트를 등록합니다
+	kakao.maps.event.addListener(marker, 'mouseover', function() {
+	  // 마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
+	    infowindow.open(map, marker);
+	});
+	// 마커에 마우스아웃 이벤트를 등록합니다
+	kakao.maps.event.addListener(marker, 'mouseout', function() {
+	    // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
+	    infowindow.close();
+	});
+}
+
+function show_layer(div_name){
+    document.all.div_01.style.display="none";
+    document.all.div_02.style.display="none";
+    document.all.div_03.style.display="none";
+    document.all.div_04.style.display="none";
+    switch(div_name) {
+        case '1':
+        document.all.div_01.style.display="";
+        break;
+        case '2':
+        document.all.div_02.style.display="";
+        break;
+        case '3':
+        document.all.div_03.style.display="";
+        relayout();
+        break;
+        case '4':
+        document.all.div_04.style.display="";
+        break;
+        }
+    }
+
+function relayout() {
+    // 지도를 표시하는 div 크기를 변경한 이후 지도가 정상적으로 표출되지 않을 수도 있습니다
+    // 크기를 변경한 이후에는 반드시  map.relayout 함수를 호출해야 합니다 
+    // window의 resize 이벤트에 의한 크기변경은 map.relayout 함수가 자동으로 호출됩니다
+    map.relayout();
+    map.setCenter(new daum.maps.LatLng(lat, lng));
+}
+
+function currentUrl() {
+	var link = location.href;
+	var urls = link.split("/tour");
+	var result = "/tour" + urls[1];
+	
+	$("#userUrl").val(result);
+}
+function currentnum() {
+	var url = $(location).attr('pathname');
+	var num = url.replace(/[^0-9]/g,"");
+	$("#uc").val(num);
+}
+</script>
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap');
+
+    html {
+        font-family: 'Black Han Sans', sans-serif;
+    }
+	#navtab > a {
+		color:black;
+	}
+	ul{
+	    list-style:none;
+	}
+	ul > li {
+		padding-right:15px;
+	}
+	h3 > a {
+		color : black;
+	}
+	h3 > a:hover {
+		color:black;
+	}
+	
+	.row1 {
+	 animation-name: myanim2;
+	 animation-duration: 2s;
+	}
+	
+	.row11 {
+	 animation-name: myanim;
+	 animation-duration: 1.3s;
+	}
+	
+	.row12 {
+	 animation-name: myanim;
+	 animation-duration: 1.5s;
+	}
+	
+	.row13 {
+	 animation-name: myanim;
+	 animation-duration: 1.7s;
+	}
+	
+	.row14 {
+	 animation-name: myanim;
+	 animation-duration: 1.9s;
+	}
+	
+	.row15 {
+	 animation-name: myanim;
+	 animation-duration: 2.1s;
+	}
+	
+	.row16 {
+	 animation-name: myanim;
+	 animation-duration: 2.3s;
+	}
+	
+	.row2 {
+	 animation-name: myanim2;
+	 animation-duration: 2.4s;
+	}
+	
+	.row3 {
+	 animation-name: myanim3;
+	 animation-duration: 2.2s;
+	}
+	
+	@keyframes myanim {
+	0% {opacity: 0.0; position: relative;top: 100px;}
+	100% {opacity: 1.0; position: relative;top: 0px;}
+	}
+	
+	@keyframes myanim2 {
+	0% {opacity: 0.0; position: relative;left: 100px;}
+	100% {opacity: 1.0; position: relative;left: 0px;}
+	}
+	
+	@keyframes myanim3 {
+	0% {opacity: 0.0; position: relative;right: 100px;}
+	100% {opacity: 1.0; position: relative;right: 0px;}
+	}
+	
+</style>
+</head>
+<body> 
+    <!-- 네비바 시작 -->
+    <header>
+        <div align="right" class="div1 container" th:unless="${session.userId} != null" style="height:24px">
+            <button data-toggle="modal" data-target="#modal1" type="button" class="border border-0 bg-white mb-2 btn1 pr-0" id="btn1">
+                <p class="text-dark mb-0">로그인</p>
+            </button>
+            <div class="modal" id="modal1" data-backdrop="static">
+            <div class="modal-dialog modal-md modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body p-0 row">
+                        <form action="/tour/loginCheck" method="POST" class="col-10 mx-auto">
+                        	<button type="button" class="close text-black mt-3" data-dismiss="modal" onclick="controlParent('reload')">&times;</button>
+							<div class="form-group mt-5">
+								<label for="userId" class="d-flex justify-content-start">ID</label>
+								<input type="text" class="form-control" id="userId" name="userId" placeholder="ID를 입력해주세요">
+							</div>
+							<div class="form-group">
+								<label for="userPw" class="d-flex justify-content-start">비밀번호</label>
+								<input type="password" class="form-control" id="userPw" name="userPw" placeholder="비밀번호를 입력해주세요">
+								<input type="hidden" id="userUrl" name="userUrl">
+							</div>
+								<button type="submit" id="login" class="btn btn-primary btn-block mt-1">로그인</button>
+							<br>
+							<div class="row justify-content-center" id="linkweb">
+							<!-- 외부 로그인 버튼 -->
+							  	<div class="col-6 pr-1" id="naver_id_login">
+							  		<script>
+							  		//네이버아이디로로그인 버튼 노출 영역
+								  	var naver_id_login = new naver_id_login("r8IBm_LEPcmDExkJuuzi", "http://localhost/tour/busanTour/login/callback");
+								  	var state = naver_id_login.getUniqState();
+								  	naver_id_login.setButton("green", 3,45);
+								  	naver_id_login.setDomain("YOUR_SERVICE_URL");
+								  	naver_id_login.setState(state);
+								  	naver_id_login.setPopup();
+								  	naver_id_login.init_naver_id_login();
+							  		</script>
+							  	</div>
+							  	<div class="col-6 pl-1 mb-2" id="cursor">
+							  		<img id="kakao"src="./img/kakaoLogin.png" alt="카카오" th:src="@{/img/kakaoLogin.png}" class="mx-1 w-100" style="cursor: pointer; width:95%">
+							  		<script>
+								  		//<![CDATA[
+								        // 사용할 앱의 JavaScript 키를 설정해 주세요.
+								        Kakao.init('11f343dcf94621322ce37f1e710e554d');
+								        // 카카오 로그인 버튼을 생성합니다.
+								        Kakao.Auth.createLoginButton({
+								            container: '#kakao',
+								            success: function (authObj) {
+								                alert(JSON.stringify(authObj));
+								            },
+								            fail: function (err) {
+								                alert(JSON.stringify(err));
+								            }
+								        });
+								     	//]]>
+							  		</script>
+							  	</div>
+							</div>
+							<div class="from-row float-right mt-5">
+								<p>회원이 아니신가요?</p>
+								<hr>
+								<button type="button" class="btn btn-secondary mb-3">
+									<a href="/tour/openSignUp" class="text-white" >회원가입</a>
+								</button>
+							</div>
+						</form>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <button type="button" class="border border-0 bg-white btn1" id="btn2">
+                <a href="/tour/openSignUp" class="text-dark pl-2" style="border-left:1px solid lightgray">회원가입</a>
+            </button>
+        </div>
+        <div class="container" align="right">
+            <button class="border border-0 bg-white mb-2 pr-0">
+                <p th:if="${session.userId} != null" th:text="|${session.nickname}(${session.userId}) 님|" id="click2" class="my-1"></p>               
+            </button>
+            <button class="border border-0 bg-white mb-2">
+                <a href="/tour/logout" class="btn btn-outline py-0 pl-2 mb-1" style="border-left:1px solid lightgray" th:if="${session.userId} != null" th:text="|로그 아웃|" id="click2"></a>
+            </button>
+        </div>  
+        <nav class="navbar navbar-expand-sm bg-light shadow mb-4">
+            <div class="container">
+            <div>
+                <a class="navbar-brand mr-5" href="/tour/busanTour">
+                    <img src="./img/Logo.png" alt="메인로고" th:src="@{/img/Logo.png}" style="width: 25%; height: 25%;">
+                </a>
+            </div>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/tour/transport" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">교통</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/area" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">지역</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/food" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">먹거리</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/cos" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">코스</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/pickList" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">추천</button>
+                    </a>
+                </li>
+            </ul>
+            </div>
+        </nav>      
+    </header>
+    <div class="container px-0" id="main" >
+    </div>
+	    <div class="container mt-5 px-0"> 
+			<div class="list">
+				<ul class="row ml-0 pl-0"style="border-bottom: 1px solid gray;">
+					<li><h3><a href="javascript:show_layer('1');" style="text-decoration:none">상세정보</a></h3></li>
+					<li><h3><a href="javascript:show_layer('2');" style="text-decoration:none">이용정보</a></h3></li>
+                    <li><h3><a href="javascript:show_layer('3');" style="text-decoration:none">지도</a></h3></li>
+                    <li><h3><a href="javascript:show_layer('4');" style="text-decoration:none">후기</a></h3></li>
+				</ul>
+			</div>
+			
+			<div id="div_01">
+				<div id="link1"></div>
+			</div>
+			<div id="div_02" style="DISPLAY: none">
+				<div id="link2"></div>
+			</div>
+			<div id="div_03" style="DISPLAY: none">
+				<div id="link3">
+					<div id="map" style="width:100%;height:500px;"></div>
+				</div>
+			</div>
+			<div id="div_04" style="DISPLAY: none">
+				<div id="link4">
+					<form action="/tour/areaDetailReview" id="frm" name="frm" method="POST">
+						<div class="row">
+	        				<div class="col-sm-10">
+	            				<div class="form-group form-inline">
+									<!-- <label for="comments">한줄후기 : &nbsp;</label> -->		<!-- 라벨은 정리 -->
+									<input id="comments" name="comments" class="form-control" placeholder="후기를 입력헤주세요" style="width:90%;">
+	       						</div>
+	    					</div>
+						    <div class="col-sm-2">
+						    	<input type="hidden" id="uc" name="uc">
+						        <button type="submit" class="btn btn-primary btn-block">글 등록</button>
+						    </div>
+						</div>
+					</form>
+				</div>
+				<table class="table table-hover color-black" id="table1" style="color:gray">
+				</table>
+			</div>
+		</div>
+	<footer class="jumbotron mt-5">
+		<h6 align="center">이 사이트는 Chrome 1920x1080 해상도에 최적화되어 있습니다.</h6>
+    </footer>
+</body>
+</html>
