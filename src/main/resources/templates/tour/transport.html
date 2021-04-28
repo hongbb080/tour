@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>부산교통안내</title>
+
+<!-- 스프링용  -->
+
+<link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+<link rel="stylesheet" th:href="@{/css/animate.css}"></link>
+
+<script th:src="@{/js/jquery-3.5.1.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/wow.min.js}"></script>
+
+<!-- 비주얼코드용 -->
+
+<link rel="stylesheet" href="./css/bootstrap.css">
+
+<script src="./js/jquery-3.5.1.js"></script>
+<script src="./js/popper.min.js"></script>
+<script src="./js/bootstrap.js"></script>
+
+<!-- 네이버 -->
+<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+<!-- 카카오 -->
+<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+<script>
+$(document).ready(function(){ 
+	new WOW().init(); 
+	currentUrl();
+});
+function currentUrl() {
+	var link = location.href;
+	var urls = link.split("/tour");
+	var result = "/tour" + urls[1];
+	
+	$("#userUrl").val(result);
+}
+</script>
+<style>
+            @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap');
+
+            html {
+                font-family: 'Black Han Sans', sans-serif;
+            }
+
+            /* header{ width: 100%; height: 100px; background-color: pink; } */
+            footer{ width: 100%; height: 100px; background-color: #333; }
+            main{ width: 100%; height: 600px; background: rgba(255, 255, 255, 0.1);}
+            .contents02{ width: 100%; height: 550px; background-color: rgba(255, 255, 255, 0.39); z-index:3;}
+            .contents01 { width: 100%; height: 2px; background-color: rgba(255, 255, 255, 0.1);}
+            .contents03 { width: 100%; height: 100px; background-color: rgba(255, 255, 255, 0.1);}
+
+            .fixed00{
+                width: 100%;
+                
+                /* 배경이미지는 최소 1920*960으로 제작해야 문제가 안생김 */
+                background-image: url(/busan/1280.jpg);          /*   리얼 배경이미지 넣을공간 */
+                background-repeat: no-repeat; /* 반복X */
+                background-size: cover; /* 요소를 비율에 맞게 커버 */
+                background-position: center; /* 이미지를 요소의 정가운데로 처리 */
+                background-attachment:scroll; /* 스크롤바 움직일때 이미지가 따라다님 */
+                z-index:2;
+            }
+
+            .fixed01{
+                width: 100%; height: 300px;
+                
+                /* 배경이미지는 최소 1920*960으로 제작해야 문제가 안생김 */
+                background-image: url(../img/1280.jpg);           /*   리얼 배경이미지 넣을공간 */
+                background-repeat: no-repeat; /* 반복X */
+                background-size: cover; /* 요소를 비율에 맞게 커버 */
+                background-position: center; /* 이미지를 요소의 정가운데로 처리 */
+                background-attachment: fixed; /* 스크롤바 움직일때 이미지가 따라다님 */
+                box-shadow: -11px 7px 8px 0px;
+            }
+            
+            .fixed02{
+                width: 100%; height: 300px;
+               
+                /* 배경이미지는 최소 1920*960으로 제작해야 문제가 안생김 */
+                background-image: url(../img/metroNorway.jpg);          /*   리얼 배경이미지 넣을공간 */
+                background-repeat: no-repeat; /* 반복X */
+                background-size: cover; /* 요소를 비율에 맞게 커버 */
+                background-position: center; /* 이미지를 요소의 정가운데로 처리 */
+                background-attachment: fixed; /* 스크롤바 움직일때 이미지가 따라다님 */
+                box-shadow: -11px 7px 8px 0px;
+            }
+
+            .fixed03{
+                width: 100%; height: 100px;
+                
+                /* 배경이미지는 최소 1920*960으로 제작해야 문제가 안생김 */
+                background-image: url(../img/metroBus.jpg);          /*   리얼 배경이미지 넣을공간 */
+                background-repeat: no-repeat; /* 반복X */
+                background-size: cover; /* 요소를 비율에 맞게 커버 */
+                background-position: center; /* 이미지를 요소의 정가운데로 처리 */
+                background-attachment: fixed; /* 스크롤바 움직일때 이미지가 따라다님 */
+                box-shadow: -11px 7px 8px 0px;
+            }
+
+            #p1 {
+                padding: 10px;
+                background-color: white;
+                width: 20%;
+                float: left;
+
+            }
+
+            #p2 {
+                padding: 10px;
+                background-color: white;
+                width: 20%;
+                margin-right: 40px;
+                float: left;
+                
+                box-shadow: 8px 1px 1px 8px;
+            }
+
+            .img {
+                    position: relative; } 
+                    
+            #Rtext {
+                font-size: 2rem;
+                font-weight: 650;
+                float : right;
+            }
+
+            #Rtext2 {
+                font-size: 2rem;
+                font-weight: 650;
+                float : right;
+            }
+
+            h1 {
+                font-weight: 600;      
+            }
+
+            #buscon {
+                float: left;
+                padding-left: 20px;
+            }
+
+            #busbtn {
+                width : 100px;
+                margin: 5px;
+            }
+
+            #busback {
+                /* align-content: flex-end; */
+                float: right;
+                width: 68%;
+                height: 100%;
+                background-color: white;
+            }
+            
+            .buscon2{
+            	background-color: white;
+			    width: 760px;
+			    position: relative;
+			    top: -80px;
+			    z-index: 2;
+			            
+            }
+
+            /* 이미지 모달창 관련 css 코드 (김) */
+            #myImg {
+                border-radius: 5px;
+                cursor: pointer;
+                transition: 0.3s;
+                position: relative;
+                left: 360px;
+            }
+
+            #myImg:hover {opacity: 0.7;}
+
+            /* The Modal (background) */
+            /* ★ 주 모달창(지하철 사진)을 모달2로 변경 */
+            .modal2 {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                padding-top: 100px; /* Location of the box */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+            }
+
+            /* Modal Content (image) */
+            .modal-content2 {
+                margin: auto;
+                display: block;
+                width: 150%;
+                max-width: 1300px;
+            }
+
+            /* Caption of Modal Image */
+            #caption {
+                margin: auto;
+                display: block;
+                width: 80%;
+                max-width: 700px;
+                text-align: center;
+                color: #ccc;
+                padding: 10px 0;
+                height: 150px;
+            }
+			/* ★ 지하철 노선도 컨텐츠도 모달2로 변경 */
+            /* Add Animation */
+            .modal-content2, #caption {    
+                -webkit-animation-name: zoom;
+                -webkit-animation-duration: 0.6s;
+                animation-name: zoom;
+                animation-duration: 0.6s;
+            }
+            
+            /* 100% Image Width on Smaller Screens */
+            @media only screen and (max-width: 2000px){
+                .modal-content2 {
+                    width: 1500px;
+                }
+            }
+            
+            @-webkit-keyframes zoom {
+                from {-webkit-transform:scale(0)} 
+                to {-webkit-transform:scale(1.2)}
+            }
+
+            @keyframes zoom {
+                from {transform:scale(0)} 
+                to {transform:scale(1.2)}
+            }
+
+            /* The Close Button */
+            .close {
+                position: absolute;
+                top: 15px;
+                right: 35px;
+                color: black;
+                font-size: 40px;
+                font-weight: bold;
+                transition: 0.3s;
+            }
+
+            .close:hover, .close:focus {
+                color: #bbb;
+                text-decoration: none;
+                cursor: pointer;
+            }
+            /* ★ 클로즈1 : 지하철 사진 , 클로즈2 : 로그인창 사진 */
+            .close2 {
+                position: absolute;
+                top: -15px;
+                right: 10px;
+                color: #f1f1f1;
+                font-size: 40px;
+                font-weight: bold;
+                transition: 0.3s;
+                background-color:transparent; 
+                border:none;
+            }
+
+            .close:hover2, .close:focus2 {
+                color: #bbb;
+                text-decoration: none;
+                cursor: pointer;
+            }
+            /* 모달창 관련 끝 */
+            
+            	            
+            /* 반응형 웹 */
+            
+            @media ( max-width: 1200px ) {
+			
+			
+			
+			#p2{
+			
+				visibility: hidden;
+			}
+			.buscon2 {
+			height: 1000px;
+			}
+        	
+        
+			
+			
+			}
+            
+            
+</style>
+</head>
+
+<body>
+    
+    <!-- 네비바 시작 -->
+    <header>
+        <div align="right" class="div1 container" th:unless="${session.userId} != null" style="height:24px">
+            <button data-toggle="modal" data-target="#modal1" type="button" class="border border-0 bg-white mb-2 btn1 pr-0" id="btn1">
+                <p class="text-dark mb-0">로그인</p>
+            </button>
+            <div class="modal" id="modal1" data-backdrop="static">
+            <div class="modal-dialog modal-md modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body p-0 row">
+                        <form action="/tour/loginCheck" method="POST" class="col-10 mx-auto">
+                        	<button type="button" class="close2 text-black mt-3" data-dismiss="modal" onclick="controlParent('reload')">&times;</button>
+							<div class="form-group mt-5">
+								<label for="userId" class="d-flex justify-content-start">ID</label>
+								<input type="text" class="form-control" id="userId" name="userId" placeholder="ID를 입력해주세요">
+							</div>
+							<div class="form-group">
+								<label for="userPw" class="d-flex justify-content-start">비밀번호</label>
+								<input type="password" class="form-control" id="userPw" name="userPw" placeholder="비밀번호를 입력해주세요">
+								<input type="hidden" id="userUrl" name="userUrl">
+							</div>
+								<button type="submit" id="login" class="btn btn-primary btn-block mt-1">로그인</button>
+							<br>
+							<div class="row justify-content-center" id="linkweb">
+							<!-- 외부 로그인 버튼 -->
+							  	<div class="col-6 pr-1" id="naver_id_login">
+							  		<script>
+							  		//네이버아이디로로그인 버튼 노출 영역
+								  	var naver_id_login = new naver_id_login("r8IBm_LEPcmDExkJuuzi", "http://localhost/tour/busanTour/login/callback");
+								  	var state = naver_id_login.getUniqState();
+								  	naver_id_login.setButton("green", 3,45);
+								  	naver_id_login.setDomain("YOUR_SERVICE_URL");
+								  	naver_id_login.setState(state);
+								  	naver_id_login.setPopup();
+								  	naver_id_login.init_naver_id_login();
+							  		</script>
+							  	</div>
+							  	<div class="col-6 pl-1 mb-2" id="cursor">
+							  		<img id="kakao"src="./img/kakaoLogin.png" alt="카카오" th:src="@{/img/kakaoLogin.png}" class="mx-1 w-100" style="cursor: pointer; width:95%">
+							  		<script>
+								  		//<![CDATA[
+								        // 사용할 앱의 JavaScript 키를 설정해 주세요.
+								        Kakao.init('11f343dcf94621322ce37f1e710e554d');
+								        // 카카오 로그인 버튼을 생성합니다.
+								        Kakao.Auth.createLoginButton({
+								            container: '#kakao',
+								            success: function (authObj) {
+								                alert(JSON.stringify(authObj));
+								            },
+								            fail: function (err) {
+								                alert(JSON.stringify(err));
+								            }
+								        });
+								     	//]]>
+							  		</script>
+							  	</div>
+							</div>
+							<div class="from-row float-right mt-5">
+								<p>회원이 아니신가요?</p>
+								<hr>
+								<button type="button" class="btn btn-secondary mb-3">
+									<a href="/tour/openSignUp" class="text-white">회원가입</a>
+								</button>
+							</div>
+						</form>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <button type="button" class="border border-0 bg-white btn1" id="btn2">
+                <a href="/tour/openSignUp" class="text-dark pl-2" style="border-left:1px solid lightgray">회원가입</a>
+            </button>
+        </div>
+        <div class="container" align="right">
+            <button class="border border-0 bg-white mb-2 pr-0">
+                <p th:if="${session.userId} != null" th:text="|${session.nickname}(${session.userId}) 님|" id="click2" class="my-1"></p>               
+            </button>
+            <button class="border border-0 bg-white mb-2">
+                <a href="/tour/logout" class="btn btn-outline py-0 pl-2 mb-1" style="border-left:1px solid lightgray" th:if="${session.userId} != null" th:text="|로그 아웃|" id="click2"></a>
+            </button>
+        </div>  
+        <nav class="navbar navbar-expand-sm bg-light shadow mb-4">
+            <div class="container">
+            <div>
+                <a class="navbar-brand mr-5" href="/tour/busanTour">
+                    <img src="./img/Logo.png" alt="메인로고" th:src="@{/img/Logo.png}" style="width: 25%; height: 25%;">
+                </a>
+            </div>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/tour/transport" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">교통</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/area" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">지역</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/food" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">먹거리</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/cos" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">코스</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/pickList" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">추천</button>
+                    </a>
+                </li>
+            </ul>
+            </div>
+        </nav>      
+    </header>
+    
+    <!-- 네비바 끝 -->
+
+        <div class="container">
+            <h2 class="font-weight-bold ml-4 pl-1 mt-5 mb-4">지역별 명소</h2>
+            <div id="p1" style="width:320px; height: 70px; position: relative; top:400px; box-shadow: 8px 8px 8px;">
+            	<p id="Rtext">지하철노선도</p>
+            </div>
+            <!-- <div class="jumbotron" style="background-color: black; z-index: index -3;"> --> 
+                <div class="fixed00"></div>      <!--    배경이미지 지하철-->
+                <div class="contents01">      <!--       띄우기용 -->
+                </div>
+                <div class="fixed01"></div>     <!--    배경이미지 찐지하철-->
+                <div class="contents02">
+                    <br>
+                    
+                    <!-- <img src="/busan/노선도_K.png" style="float:right; ">       지하철 노선도 -->
+
+                    <!-- <img src="/busan/노선도_K.png" style="float:right; ">       지하철 노선도 -->
+					<!-- ★노선도 이미지창의 모달의 클래스를 2번으로 변경. 컨텐츠도 2번으로 변경, 스타일 약간 추가. -->
+                    <img id="myImg" src="./img/metro.png" th:src="@{/img/metro.png}" style="position: relative; left: 300px;z-index: 0;" class="img-fluid">
+                    <!-- <img src="busan/빈박스.png" usemap="#imagemap" class="imageblock" style="opacity: 0.0; position:relative; bottom: 70px;"> -->
+                    <div id="myModal" class="modal2">
+                        <span class="close">X</span>
+                        <img class="modal-content2" id="img01" style="background-color:white;">
+                        <div id="caption"></div>
+                    </div>
+
+                    <script>
+                        // Get the modal
+                        var modal = document.getElementById('myModal');
+                        
+                        // Get the image and insert it inside the modal - use its "alt" text as a caption
+                        var img = document.getElementById('myImg');
+                        var modalImg = document.getElementById("img01");
+                        var captionText = document.getElementById("caption");
+                        img.onclick = function(){
+                            modal.style.display = "block";
+                            modalImg.src = this.src;
+                            modalImg.alt = this.alt;
+                            captionText.innerHTML = this.alt;
+                        }
+                        
+                        // Get the <span> element that closes the modal
+                        var span = document.getElementsByClassName("close")[0];
+                        
+                        // When the user clicks on <span> (x), close the modal
+                        span.onclick = function() { 
+                            modal.style.display = "none";
+                        }
+                   </script>
+                </div>
+                <div class="fixed02" style="height: 300px;"></div>     <!--    배경이미지 도로 윗부분-->
+                <div id="p2" style="width:320px; height: 70px; position: relative; top:75px; box-shadow: 8px 8px 8px;">
+					<p id="Rtext2">명소로 가는 버스</p>    <!--      옆에있는 문장 -->         
+                </div>
+                
+                <div id="busback"><!--         1번 덮어씌우는 흰부분 -->
+                    <div class="contents03" style="height: 100px;">
+                    
+                   
+	                        <div id="buscon" width="70%">   
+                                <br>
+                                <h1>감천문화마을</h1>
+                                <hr>
+                                <div class="wow fadeInRight">
+	                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/-/bus-route/71111?c=14359861.4280517,4179949.3371463,12,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn" title="서구청 서구2-2 환승">8번</button>
+	                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/-/bus-route/71137?c=14362970.4557450,4184163.1868438,12,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn" title="충무동교차로 서구2-2 환승">61번</button>
+	                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/-/bus-route/71137?c=14362970.4557450,4184163.1868438,12,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn" title="까치새길입구 하차">87번</button>
+	                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/-/bus-route/71001?c=14355791.1562955,4180943.0185140,12,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn" title="충무동교차로 서구2-2 환승">161번</button>
+	                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/-/bus-route/71251?c=14360958.0742477,4176507.8099908,14,0,0,0,dh'" class="btn-lg btn-success" id="busbtn" style="width: 120px;">서구2-2</button>
+	                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-station/%EA%B0%90%EC%B2%9C%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84?c=14361392.5572745,4177314.9469098,17,0,0,0,dh'" class="btn-lg btn-warning" id="busbtn">etc.</button>
+	                            </div>
+                                <br><br><br>
+                                <h1>자갈치시장</h1>
+                                <hr>
+                                <div class="wow fadeInRight">
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/5-1/bus-route/71163?c=14361348.7988294,4187429.4490692,11,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn" title="자갈치시장 하차">5-1번</button>
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/17/bus-route/71055?c=14358495.3089509,4181701.9762324,12,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn" title="남포동 하차">17번</button>
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/-/bus-route/71044?c=14366449.3402729,4180357.0313753,13,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn" title="자갈치시장 하차">27번</button>
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/1003/bus-route/71181?c=14365840.4174204,4189123.0912915,11,0,0,0,dh'" class="btn-lg btn-danger" id="busbtn">1003번</button>
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-station/%EC%9E%90%EA%B0%88%EC%B9%98?c=14363373.9483671,4177183.8693495,16,0,0,0,dh'" class="btn-lg btn-warning" id="busbtn">etc.</button>
+                                </div>
+                                <br><br><br>
+                                <h1>용두산공원</h1>
+                                <hr>
+                                <div class="wow fadeInRight">
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/5-1/bus-route/71163?c=14361348.7988294,4187429.4490692,11,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn" title="부산데파트 하차">5-1번</button>
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/15/bus-route/71164?c=14353477.4971756,4190054.8346629,11,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn" title="국제시장 하차">15번</button>
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/41/bus-route/71054?c=14365125.6164766,4182078.8788358,12,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn" title="부산데파트 하차">41번</button>
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/81/bus-route/71075?c=14360269.6833125,4184278.4696307,12,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn" title="국제시장 하차">81번</button>
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/1003/bus-route/71181?c=14365840.4174204,4189123.0912915,11,0,0,0,dh'" class="btn-lg btn-danger" id="busbtn">1003번</button>
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-station/%EB%82%A8%ED%8F%AC%EC%97%AD?c=14363722.6923086,4177340.3263918,16,0,0,0,dh'" class="btn-lg btn-warning" id="busbtn">etc.</button>
+                                </div>
+                                <br><br><br>
+                                <h1>센텀시티</h1>
+                                <hr>
+                                <div class="wow fadeInRight">
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/5-1/bus-route/71163?c=14361348.7988294,4187429.4490692,11,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn">5-1번</button>
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/39/bus-route/71227?c=14370275.9731555,4189456.1925393,11,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn" title="해운대시외버스 루트">39번</button>
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/40/bus-route/71091?c=14365040.0367180,4187507.0483180,11,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn">40번</button>
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/1002/bus-route/71238?c=14359465.6038660,4207166.3791241,10,0,0,0,dh'" class="btn-lg btn-danger" id="busbtn">1002번</button>
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-station/%EC%84%BC%ED%85%80%EC%8B%9C%ED%8B%B0?c=14374634.0780964,4187008.4161413,16,0,0,0,dh'" class="btn-lg btn-warning" id="busbtn">etc.</button>
+                                </div>
+                                <br><br><br>
+                                <h1>서면</h1>
+                                <hr>
+                                <div class="wow fadeInRight">
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/40/bus-route/71091?c=14365040.0367180,4187507.0483180,11,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn">40번</button>
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/81/bus-route/71075?c=14360269.6833125,4184278.4696307,12,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn">81번</button>
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/83/bus-route/71080?c=14368362.5957728,4184420.0733047,13,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn">83번</button>
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/88/bus-route/71056?c=14365422.2218594,4184091.2686165,13,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn">88번</button>
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/1003/bus-route/71181?c=14365840.4174204,4189123.0912915,11,0,0,0,dh'" class="btn-lg btn-danger" id="busbtn">1003번</button>
+                                <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-station/%EC%84%9C%EB%A9%B4%EC%97%AD?c=14366563.9999694,4185347.1051047,16,0,0,0,dh'" class="btn-lg btn-warning" id="busbtn">etc.</button>
+                                </div>
+                                <br><br><br>
+                                <!--   (5개씩이 적당한듯) -->
+                        </div>
+                    </div>
+                </div>
+                     <!--    여기가...? -->
+                    
+                <div class="contents03" style="height: 200px; ">   <!--      첫번째 문단 가로로 지르는 흰부분 -->
+                    
+                    <div id="p2" style="width:320px; height: 70px; position: relative; top:135px; box-shadow: 8px 8px 8px;"><!--    2번째 문단 타이틀 영역 -->
+                                     
+                            <p id="Rtext2">명소로 가는 버스</p><br>  
+                            
+                    </div>
+                    <div id="busback" style=" position:relative; top: 99px; height: 0px;">   <!--     2번째문단. 없애면 배경 다드러남   -->
+                    
+                    <section>
+                            
+                            <div id="buscon" width="70%" class="buscon2">   <!--    2번째 문단 덮어씌우는 흰부분 -->
+                                <br>
+                            <h1>해운대해수욕장</h1>
+                            <hr>
+                            
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/40/bus-route/71091?c=14365040.0367180,4187507.0483180,11,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn">40번</button>
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/307/bus-route/71178?c=14358733.9818845,4190526.3109353,11,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn">307번</button>
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/1001/bus-route/71174?c=14362861.5814119,4187239.5187190,11,0,0,0,dh'" class="btn-lg btn-danger" id="busbtn">1001번</button>
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/1003/bus-route/71181?c=14365842.6255150,4189112.2259120,11,0,0,0,dh'" class="btn-lg btn-danger" id="busbtn">1003번</button>
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-station/%ED%95%B4%EC%9A%B4%EB%8C%80%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5?c=14377243.6860152,4185764.5229388,15,0,0,0,dh'" class="btn-lg btn-warning" id="busbtn">etc.</button>
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-station/%ED%95%B4%EC%9A%B4%EB%8C%80%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5?c=14377243.6860152,4185764.5229388,15,0,0,0,dh'" class="btn-lg btn-info" id="busbtn">터미널</button>
+                            <br><br><br>
+                            
+                            <h1>광안리해수욕장</h1>
+                            <hr>
+                            
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/38/bus-route/71090?c=14365919.0625433,4188156.7630584,11,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn">38번</button>
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/41/bus-route/71054?c=14365125.6164766,4182078.8788358,12,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn">41번</button>
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/83/bus-route/71080?c=14368362.5957728,4184420.0733047,13,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn">83번</button>
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/1001/bus-route/71174?c=14362861.5814119,4187239.5187190,11,0,0,0,dh'" class="btn-lg btn-danger" id="busbtn">1001번</button>
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/1003/bus-route/71181?c=14365840.4174204,4189123.0912915,11,0,0,0,dh'" class="btn-lg btn-danger" id="busbtn">1003번</button>
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-station/%EA%B4%91%EC%95%88%EB%A6%AC%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5?c=14372941.7145170,4184871.1651707,15,0,0,0,dh'" class="btn-lg btn-warning" id="busbtn">etc.</button>
+                            <br><br><br>
+                            
+                            <h1>동래읍성지</h1>         
+                            <hr>
+                            
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/%EB%B6%80%EC%82%B0%2043/bus-route/71124?c=14361103.5297613,4188194.9815726,11,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn" title="동래역 하차후 동래7 버스 환승">43번</button>
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/%EB%B6%80%EC%82%B0%2050/bus-route/71025?c=14364275.6664351,4204514.2871115,11,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn" title="온천입구 하차">50번</button>
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/%EB%8F%99%EB%9E%98%EA%B5%AC7/bus-route/2806514?c=14369824.5169572,4192708.3492271,15,0,0,0,dh'" class="btn-lg btn-success" id="busbtn"  title="동래구문화회관 하차">동래7</button>
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/1002/bus-route/71238?c=14359465.6038660,4207166.3791241,10,0,0,0,dh'" class="btn-lg btn-danger" id="busbtn" title="동래구노인복지관 하차">1002번</button>
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-station/%EC%95%88%EB%9D%BD%EA%B5%90%EC%B0%A8%EB%A1%9C/bus-station/626982?c=14370605.6078400,4190885.8038339,15,0,0,0,dh'" class="btn-lg btn-warning" id="busbtn">etc.</button>
+                            <br><br><br>
+                            
+                            <h1>사직운동장</h1>
+                            <hr>
+                            
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/50/bus-route/71025?c=14364294.1990997,4204522.4643327,11,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn">50번</button>
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/131/bus-route/71050?c=14362632.2703270,4191825.7404161,11,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn">113번</button>
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-station/%EC%82%AC%EC%A7%81%EC%9A%B4%EB%8F%99%EC%9E%A5?c=14367004.7072106,4190487.4952569,16,0,0,0,dh'" class="btn-lg btn-warning" id="busbtn">etc.</button>
+                            <br><br><br>
+                            
+                            <h1>부산현대미술관</h1>
+                            <hr>
+                            
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/2/bus-route/71004?c=14356307.1062364,4175879.0653901,12,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn" title="사하구청에서 환승">2번</button>
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/-/bus-route/71129?c=14343484.7947416,4177369.5874417,12,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn">58번</button>
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-route/168/bus-route/71326?c=14354625.4916141,4180809.2537145,12,0,0,0,dh'" class="btn-lg btn-primary" id="busbtn" title="서면에서 탑승">168번</button>
+                            <button type="button" onclick = "location.href = 'https://www.busan.go.kr/moca/location01'" class="btn-lg btn-info" id="busbtn" style="width:140px;" title="하단역에서 탑승">셔틀버스</button>
+                            <button type="button" onclick = "location.href = 'https://map.naver.com/v5/bus/bus-station/%EB%B6%80%EC%82%B0%ED%98%84%EB%8C%80%EB%AF%B8%EC%88%A0%EA%B4%80?c=14352953.4316204,4178771.7291793,14,0,0,0,dh'" class="btn-lg btn-warning" id="busbtn">etc.</button>
+                            <br><br><br>
+                            </div>
+
+                    </section>
+                </div>
+                </div>
+                <div class="fixed02" style="height: 1000px;"></div>     <!--    배경이미지 1번 뒤에 덮어주는 부분-->
+
+                <div class="contents03" style="height: 200px;"> <!-- 2번째 문단 가로로 지르는 흰 부분 -->
+                    <br><br>
+                    <div id="p2" style="width:320px; height: 70px; position: relative; top:1200px; box-shadow: 8px 8px 8px;">  <!--      3번째 문단 타이틀 영역 -->
+                                        
+                            <p id="Rtext2">명소로 가는 버스</p><br>
+                        
+                    </div>
+                    <div id="busback" style=" position:relative; top: 60px; height:0px;"><!-- 3번째 문단 없애면 다드러남  -->
+                    <br><br>
+                    <section>
+                        <div id="buscon" width="70%" style="background-color: white; width:760px; position: relative; top:1000px; z-index: 1;"> <!--         3번 덮어씌우는 흰부분 -->
+                            <br>
+                            <h1>태종대</h1>
+                            <hr>
+                            
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-primary" id="busbtn">8번</button>
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-primary" id="busbtn">30번</button>
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-primary" id="busbtn">66번</button>
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-danger" id="busbtn">1111번</button>
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-warning" id="busbtn">etc.</button>
+                            <br><br><br>
+
+                            <h1>이기대</h1>
+                            <hr>
+                            
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-primary" id="busbtn">20번</button>
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-primary" id="busbtn">24번</button>
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-primary" id="busbtn">27번</button>
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-danger" id="busbtn">39번</button>
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-warning" id="busbtn">etc.</button>
+                            <br><br><br>
+                            
+                            <h1>송도</h1>
+                            <hr>
+                            
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-primary" id="busbtn">17번</button>
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-primary" id="busbtn">26번</button>
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-primary" id="busbtn">61번</button>
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-danger" id="busbtn">96번</button>
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-warning" id="busbtn">etc.</button>
+                            <br><br><br>
+                            
+                            <h1>국제시장</h1>
+                            <hr>
+                            
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-primary" id="busbtn">27번</button>
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-primary" id="busbtn">41번</button>
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-primary" id="busbtn">83번</button>
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-danger" id="busbtn">111번</button>
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-warning" id="busbtn">etc.</button>
+                            <br><br><br>
+                            
+                            <h1>청사포</h1>
+                            <hr>
+                            
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-primary" id="busbtn">77번</button>
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-primary" id="busbtn">99번</button>
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-primary" id="busbtn">22번</button>
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-danger" id="busbtn">1111번</button>
+                            <button type="button" onclick = "location.href = 'https://m.blog.naver.com/rain483/220529222723'" class="btn-lg btn-warning" id="busbtn">etc.</button>
+                            <br><br><br>
+                            
+
+                    </section>
+                </div>
+                </div>
+                <div class="fixed02" style="height: 1000px;"></div>     <!--    배경이미지 2번 -->
+                <div class="contents03" style="height: 200px;">     <!--     3번 뒤에 덮어주는 부분 -->
+                
+                
+                
+                </div>
+                <div class="fixed03" style="height: 1000px;"></div>     <!--    배경이미지 3번(버스쌩쌩사진) -->
+                <div class="contents03" style="height: 200px;">     <!--     3번 뒤에 덮어주는 부분 -->
+                    <br>
+                    <button type="button" onclick = "location.href = 'http://bus.busan.go.kr/busanBIMS/bus_map/map_main.asp?menuNum=3&mapGubun=daum'" class="btn-lg btn-primary" id="busbtn" style="width: 100%; height: 88%; margin-left: 0px;  padding: 10px;">부산시 전체 버스 노선도 보러가기</button>
+                    
+                </div>
+            <!-- </div> -->
+        </div>
+     <footer class="jumbotron mt-5">
+		<h6 align="center">이 사이트는 Chrome 1920x1080 해상도에 최적화되어 있습니다.</h6>
+    </footer>
+</body>
+</html>
+
+
