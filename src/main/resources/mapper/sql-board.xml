@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tour.mapper.TourMapper">
+	<!--추천 게시판 -->
+	<insert id="insertTourBoard" parameterType="tour.dto.PickDto">
+		
+		<![CDATA[
+			INSERT INTO memberreco 
+						(writer, title, comment, created_day, nickname) 
+			VALUES 
+						(#{writer}, #{title}, #{comment}, NOW(), #{nickname});
+		]]>
+	
+	</insert>
+	<!--추천 게시판 -->
+	<select id="selectPickBoardList" resultType="tour.dto.PickDto">
+		<![CDATA[
+			SELECT 
+				num,
+				title,
+				comment,
+				writer,
+				nickname,
+			DATE_FORMAT(created_day, '%y.%m.%d  %H:%i') AS created_day
+			FROM
+				memberreco 
+			WHERE
+				delete_yn = 'N'
+			ORDER BY num desc
+		]]>
+	</select>
+	<!-- 픽 삭제부분 -->
+	<update id="pickDelete" parameterType="String">
+		<![CDATA[ 
+			UPDATE
+				memberreco
+			SET
+				delete_yn = 'Y'
+			WHERE
+				num = #{num}
+		]]>
+	</update>
+
+	
+	<!-- 상세페이지 후기-->
+	<insert id="insertTourBoard2" parameterType="tour.dto.PickDto2">
+		<![CDATA[
+			INSERT INTO review 
+						(user_id, comments, created_time, UC_SEQ, nickname) 
+			VALUES 
+						(#{userid}, #{comments}, NOW(), #{uc}, #{nickname})
+		]]>
+	</insert>
+	<!-- 상세페이지 후기 -->
+	<select id="selectPickBoardList2" resultType="tour.dto.PickDto2">
+		<![CDATA[
+			SELECT 
+				review_num, 
+				comments,
+				user_id,
+				nickname,
+				DATE_FORMAT(created_time, '%y.%m.%d %H:%i') AS created_time
+			FROM
+				review 
+			WHERE
+				UC_SEQ = #{uc}
+			ORDER BY 
+				review_num desc
+		]]>
+	</select>
+</mapper>
