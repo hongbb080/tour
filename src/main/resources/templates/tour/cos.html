@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    
+    <title>코스 메인</title>
+
+<link rel="stylesheet" href="/css/bootstrap.css" th:href="@{/css/bootstrap.css}">
+<script src="/js/jquery-3.5.1.js" th:src="@{/js/jquery-3.5.1.js}"></script>
+<script src="/js/popper.min.js" th:src="@{/js/popper.min.js}"></script>
+<script src="/js/bootstrap.js" th:src="@{/js/bootstrap.js}"></script>
+
+<!-- 네이버 -->
+<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+<!-- 카카오 -->
+<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+<script>
+$(document).ready(function(){ 
+	currentUrl();
+});
+function currentUrl() {
+	var link = location.href;
+	var urls = link.split("/tour");
+	var result = "/tour" + urls[1];
+	
+	$("#userUrl").val(result);
+}
+</script>
+<style>
+	/* 열마다 "id" 지정 필요함. 위치는 메인 아래 3번째줄에 col-sm-12... 붙은 열을 시작으로 3군데 */
+	.card1 {
+	 animation-name: myanim;
+	 animation-duration: 1s;
+	}
+	
+	.card2 {
+	 animation-name: myanim;
+	 animation-duration: 2s;
+	}
+	
+	.card3 {
+	 animation-name: myanim;
+	 animation-duration: 3s;
+	}
+	
+	@keyframes myanim {
+	
+	0% {opacity: 0.0;position: relative;left: 100px;}
+	100% {opacity: 1.0;position: relative;left: 0px;}
+	}
+</style>
+</head>
+<body>
+    <header>
+        <div align="right" class="div1 container" th:unless="${session.userId} != null" style="height:24px">
+            <button data-toggle="modal" data-target="#modal1" type="button" class="border border-0 bg-white mb-2 btn1 pr-0" id="btn1">
+                <p class="text-dark mb-0">로그인</p>
+            </button>
+            <div class="modal" id="modal1" data-backdrop="static">
+            <div class="modal-dialog modal-md modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body p-0 row">
+                        <form action="/tour/loginCheck" method="POST" class="col-10 mx-auto">
+                        	<button type="button" class="close text-black mt-3" data-dismiss="modal" onclick="controlParent('reload')">&times;</button>
+							<div class="form-group mt-5">
+								<label for="userId" class="d-flex justify-content-start">ID</label>
+								<input type="text" class="form-control" id="userId" name="userId" placeholder="ID를 입력해주세요">
+							</div>
+							<div class="form-group">
+								<label for="userPw" class="d-flex justify-content-start">비밀번호</label>
+								<input type="password" class="form-control" id="userPw" name="userPw" placeholder="비밀번호를 입력해주세요">
+								<input type="hidden" id="userUrl" name="userUrl">
+							</div>
+								<button type="submit" id="login" class="btn btn-primary btn-block mt-1">로그인</button>
+							<br>
+							<div class="row justify-content-center" id="linkweb">
+							<!-- 외부 로그인 버튼 -->
+							  	<div class="col-6 pr-1" id="naver_id_login">
+							  		<script>
+							  		//네이버아이디로로그인 버튼 노출 영역
+								  	var naver_id_login = new naver_id_login("r8IBm_LEPcmDExkJuuzi", "http://localhost/tour/busanTour/login/callback");
+								  	var state = naver_id_login.getUniqState();
+								  	naver_id_login.setButton("green", 3,45);
+								  	naver_id_login.setDomain("YOUR_SERVICE_URL");
+								  	naver_id_login.setState(state);
+								  	naver_id_login.setPopup();
+								  	naver_id_login.init_naver_id_login();
+							  		</script>
+							  	</div>
+							  	<div class="col-6 pl-1 mb-2" id="cursor">
+							  		<img id="kakao"src="./img/kakaoLogin.png" alt="카카오" th:src="@{/img/kakaoLogin.png}" class="mx-1 w-100" style="cursor: pointer; width:95%">
+							  		<script>
+								  		//<![CDATA[
+								        // 사용할 앱의 JavaScript 키를 설정해 주세요.
+								        Kakao.init('11f343dcf94621322ce37f1e710e554d');
+								        // 카카오 로그인 버튼을 생성합니다.
+								        Kakao.Auth.createLoginButton({
+								            container: '#kakao',
+								            success: function (authObj) {
+								                alert(JSON.stringify(authObj));
+								            },
+								            fail: function (err) {
+								                alert(JSON.stringify(err));
+								            }
+								        });
+								     	//]]>
+							  		</script>
+							  	</div>
+							</div>
+							<div class="from-row float-right mt-5">
+								<p>회원이 아니신가요?</p>
+								<hr>
+								<button type="button" class="btn btn-secondary mb-3">
+									<a href="/tour/openSignUp" class="text-white">회원가입</a>
+								</button>
+							</div>
+						</form>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <button type="button" class="border border-0 bg-white btn1" id="btn2">
+                <a href="/tour/openSignUp" class="text-dark pl-2" style="border-left:1px solid lightgray">회원가입</a>
+            </button>
+        </div>
+        <div class="container" align="right">
+            <button class="border border-0 bg-white mb-2 pr-0">
+                <p th:if="${session.userId} != null" th:text="|${session.nickname}(${session.userId}) 님|" id="click2" class="my-1"></p>               
+            </button>
+            <button class="border border-0 bg-white mb-2">
+                <a href="/tour/logout" class="btn btn-outline py-0 pl-2 mb-1" style="border-left:1px solid lightgray" th:if="${session.userId} != null" th:text="|로그 아웃|" id="click2"></a>
+            </button>
+        </div>  
+        <nav class="navbar navbar-expand-sm bg-light shadow mb-4">
+            <div class="container">
+            <div>
+                <a class="navbar-brand mr-5" href="/tour/busanTour">
+                    <img src="./img/Logo.png" alt="메인로고" th:src="@{/img/Logo.png}" style="width: 25%; height: 25%;">
+                </a>
+            </div>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/tour/transport" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">교통</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/area" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">지역</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/food" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">먹거리</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/cos" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">코스</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tour/pickList" class="nav-link text-dark font-weight-bold mr-4">
+                        <button type="button" style="font-size: 32px;" class="border border-0 bg-light">추천</button>
+                    </a>
+                </li>
+            </ul>
+            </div>
+        </nav>      
+    </header>
+    <main class="container">
+        <h2 class="font-weight-bold ml-4 pl-1 mt-5 mb-4">추천코스</h2>
+        <div class="row">
+            <div class="col-sm d-flex align-items-center justify-content-end">
+                <div class="card shadow mx-3 col-sm p-0  mb-4 card1" style="width: 300px; height:360px;">
+                    <img src="./img/courseEXshot.png" alt="1" th:src="@{/img/courseEXshot.png}" class="card-img-top" style="width: 100%;">
+                    <div class="card-body">
+                        <h4 class="card-title">부산 당일치기 코스 A</h4>
+                        <p class="card-text">부산역 근처에서 바로 즐기는 감천문화마을 코스!</p>
+                        <a href="./cos1" class="btn stretched-link"></a>
+                    </div>
+                </div>
+                <div class="card shadow mx-3 col-sm p-0  mb-4 card2" style="width: 300px; height:360px;">
+                    <img src="./img/부산코스 (2).png" alt="2" th:src="@{/img/부산코스 (2).png}" class="card-img-top" style="width: 100%;">
+                    <div class="card-body">
+                        <h4 class="card-title">부산 당일치기 코스 B</h4>
+                        <p class="card-text">프브스 선정 부산에서 가장 시원하다고 소문난 다대포 정복 코스!</p>
+                        <a href="./cos2" class="btn stretched-link"></a>
+                    </div>
+                </div>
+                <div class="card shadow mx-3 col-sm p-0  mb-4 card3" style="width: 300px; height:360px;">
+                    <img src="./img/부산코스 (1).png" alt="3" th:src="@{/img/부산코스 (1).png}" class="card-img-top" style="width: 100%;">
+                    <div class="card-body">
+                        <h4 class="card-title">부산 당일치기 코스 C</h4>
+                        <p class="card-text">바다를 보고싶다면 여기로!</p>
+                        <a href="./cos3" class="btn stretched-link"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 d-flex align-items-center justify-content-end">
+                <div class="card shadow mx-3 col-sm p-0  mb-4 card1" style="width: 300px; height:360px;">
+                    <img src="./img/부산코스 (4).jpg" alt="4" th:src="@{/img/부산코스 (4).jpg}" class="card-img-top" style="width: 100%;">
+                    <div class="card-body">
+                        <h4 class="card-title">부산 1박2일 코스  A</h4>
+                        <p class="card-text">동부산과 서부산을 하룻밤만에 정복하는 코스</p>
+                        <a href="./cos4" class="btn stretched-link"></a>
+                    </div>
+                </div>
+                <div class="card shadow mx-3 col-sm p-0  mb-4 card2" style="width: 300px; height:360px;">
+                    <img src="./img/부산코스 (3).png" alt="메인" th:src="@{/img/부산코스 (3).png}" class="card-img-top" style="width: 100%;">
+                    <div class="card-body">
+                        <h4 class="card-title">부산 1박2일 코스 B</h4>
+                        <p class="card-text">해운대 완전정복 코스!</p>
+                        <a href="./cos5" class="btn stretched-link"></a>
+                    </div>
+                </div>
+                <div class="card shadow mx-3 col-sm p-0  mb-4 card3" style="width: 300px; height:360px;">
+                    <img src="./img/부산코스 (5).jpg" alt="5" th:src="@{/img/부산코스 (5).jpg}" class="card-img-top" style="width: 100%;">
+                    <div class="card-body">
+                        <h4 class="card-title">부산 1박2일 코스 C</h4>
+                        <p class="card-text">영도대교 보러가실래요?</p>
+                        <a href="./cos6" class="btn stretched-link"></a>
+                    </div>
+                </div>
+            </div>
+            <script> function making(){ alert('공사중입니다.'); } </script>
+            <div class="col-sm-12 d-flex align-items-center justify-content-end">
+                <div class="card shadow mx-3 col-sm p-0  mb-4 card1" style="width: 300px; height:360px;">
+                    <img src="../img/224AF13C5109D42D0C.jpg" alt="" class="card-img-top" style="width: 100%;">
+                    <div class="card-body">
+                        <h4 class="card-title">부산 2박3일 코스 A</h4>
+                        <p class="card-text">부산에서 화끈하게 노는 방법!</p>
+                        <a href="#" onclick="javascript:making();" class="btn stretched-link"></a>
+                    </div>
+                </div>
+                <div class="card shadow mx-3 col-sm p-0  mb-4 card2" style="width: 300px; height:360px;">
+                    <img src="../img/범어사.jpg" alt="" class="card-img-top" style="width: 100%;">
+                    <div class="card-body">
+                        <h4 class="card-title">부산 2박3일 코스 B</h4>
+                        <p class="card-text">부산의 사찰 탐방기</p>
+                        <a href="#" onclick="javascript:making();" class="btn stretched-link"></a>
+                    </div>
+                </div>
+                <div class="card shadow mx-3 col-sm p-0  mb-4 card3" style="width: 300px; height:360px;">
+                    <img src="../img/기장 죽성리 왜성.jpg" alt="" class="card-img-top" style="width: 100%;">
+                    <div class="card-body">
+                        <h4 class="card-title">부산 2박3일 코스 C</h4>
+                        <p class="card-text">숨겨진 명소까지 싹싹 긁어보실래요?</p>
+                        <a href="#" onclick="javascript:making();" class="btn stretched-link"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="jumbotron mt-5">
+		<h6 align="center">이 사이트는 Chrome 1920x1080 해상도에 최적화되어 있습니다.</h6>
+    </footer>
+</body>
+</html>
